@@ -72,7 +72,7 @@
 
 <template>
 	<div class="stage">
-		<h1>coming soon...</h1>
+		<h1>{{status}}</h1>
 		<table>
 			<tr v-for="row in rows">
 				<td v-for="cell in row" :class="cell.cls">
@@ -107,10 +107,12 @@
 				height: 20,
 				rows: [],
 				activeUnit: null,
-				start: [0,0]
+				start: [0, -3],
+				status: 'stop'
 			};
 		},
 		methods: {
+			// 绘制表格
 			renderGrid: function(){
 				var rows = [], row;
 
@@ -153,12 +155,6 @@
 				});
 				return cells;
 			},
-			update: function(){
-
-			},
-			cellStatus: function(){
-				return []; //return Math.random() > 0.5 ? ['active'] : [];
-			},
 			// 计算画布尺寸：格子的数量
 			calSize: function(){
 				var doc = document.documentElement,
@@ -171,8 +167,9 @@
 
 				this.width = Math.floor(cw/cellWidth);
 				this.height = Math.floor(ch/cellWidth);
-				this.start = [Math.floor(this.width/2), 0];
+				this.start = [Math.floor(this.width/2), -3];
 			},
+			// 刷新状态
 			refreshActive: function(){
 				this.activeUnit.prev && this.findCells(this.activeUnit.prev, function(cell){
 					cell.cls = '';
@@ -181,29 +178,77 @@
 					cell.cls = 'active';
 				});
 			},
+			// 创建形状
 			createShape: function(type){
 				this.activeUnit = Shape.create(type).offset(this.start);
 				this.refreshActive();
 			},
+			// 移动：左、右、下
 			move: function(type){
 				if(this.activeUnit){
+					// testMove
+					if(!this.testMove(this.activeUnit.clone().move(type).specific(this.activeUnit))){
+						if(type === 'down'){
+							if(this.isGameOver()){
+								this.status = 'game over';
+							};
+							this.createShape('T');
+						};
+						return;
+					};
+					// move
 					this.activeUnit.move(type);
 					this.refreshActive();
 				}
+			},
+			// 检查是否gameover
+			isGameOver: function(){
+				var failed = false;
+				this.activeUnit && this.activeUnit.forEach(function(n){
+					failed = failed || n[1] < 0;
+				});
+				return failed;
+			},
+			// 检查是否可移动
+			testMove: function(shape){
+				var reject = false, cell;
+				
+				// 检查每一个请求新占的格子
+				shape.forEach(function(n){
+					if(reject) return;
+					// 检查是否超出边界或者被物体阻挡
+					if(n[0] < 0 || n[0] >= this.width || n[1] >= this.height){
+						reject = true;
+					}else{
+						cell = this.findCell(n);
+						if(cell && cell.cls === 'active'){
+							reject = true;
+							console.info('阻挡');
+						};
+					};
+				}.bind(this));
+				// 如果未被阻挡则测试通过
+				return !reject;
 			}
 		},
 		ready: function(){
+
+			// 计算尺寸然后绘制表格
 			this.calSize();
 			this.renderGrid();
-			this.createShape('T');
 
-			//
-			setInterval(function(){
-				this.activeUnit.down();
-				this.refreshActive();
-			}.bind(this), 1000);
+			// 创建初始形状，然后开始游戏
+			this.createShape('T');
+			this.status = 'playing';
 			
-			//
+			// 形状不断下降
+			setInterval(function(){
+				if(this.status === 'playing'){
+					this.move('down');
+				};
+			}.bind(this), 500);
+			
+			// 按钮事件
 			new Hammer(this.$el).on('swipeleft swiperight', function(e){
 				this.move(e.type.replace('swipe', ''));
 			}.bind(this));
@@ -214,6 +259,10 @@
 
 			new Hammer(document.querySelector('.btn.right')).on('tap', function(){
 				this.move('right');
+			}.bind(this));
+
+			new Hammer(document.querySelector('.btn.down')).on('tap', function(){
+				this.move('down');
 			}.bind(this));
 		}
 	};

@@ -10712,7 +10712,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				height: 20,
 				rows: [],
 				activeUnit: null,
-				start: [0, 0]
+				start: [0, -3],
+				status: 'stop'
 			};
 		},
 		methods: {
@@ -10761,10 +10762,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				return cells;
 			},
-			update: function update() {},
-			cellStatus: function cellStatus() {
-				return [];
-			},
 
 			calSize: function calSize() {
 				var doc = document.documentElement,
@@ -10777,8 +10774,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				this.width = Math.floor(cw / cellWidth);
 				this.height = Math.floor(ch / cellWidth);
-				this.start = [Math.floor(this.width / 2), 0];
+				this.start = [Math.floor(this.width / 2), -3];
 			},
+
 			refreshActive: function refreshActive() {
 				this.activeUnit.prev && this.findCells(this.activeUnit.prev, function (cell) {
 					cell.cls = '';
@@ -10787,26 +10785,70 @@ return /******/ (function(modules) { // webpackBootstrap
 					cell.cls = 'active';
 				});
 			},
+
 			createShape: function createShape(type) {
 				this.activeUnit = _shape2.default.create(type).offset(this.start);
 				this.refreshActive();
 			},
+
 			move: function move(type) {
 				if (this.activeUnit) {
+					if (!this.testMove(this.activeUnit.clone().move(type).specific(this.activeUnit))) {
+						if (type === 'down') {
+							if (this.isGameOver()) {
+								this.status = 'game over';
+							};
+							this.createShape('T');
+						};
+						return;
+					};
+
 					this.activeUnit.move(type);
 					this.refreshActive();
 				}
+			},
+
+			isGameOver: function isGameOver() {
+				var failed = false;
+				this.activeUnit && this.activeUnit.forEach(function (n) {
+					failed = failed || n[1] < 0;
+				});
+				return failed;
+			},
+
+			testMove: function testMove(shape) {
+				var reject = false,
+				    cell;
+
+				shape.forEach(function (n) {
+					if (reject) return;
+
+					if (n[0] < 0 || n[0] >= this.width || n[1] >= this.height) {
+						reject = true;
+					} else {
+						cell = this.findCell(n);
+						if (cell && cell.cls === 'active') {
+							reject = true;
+							console.info('阻挡');
+						};
+					};
+				}.bind(this));
+
+				return !reject;
 			}
 		},
 		ready: function ready() {
 			this.calSize();
 			this.renderGrid();
+
 			this.createShape('T');
+			this.status = 'playing';
 
 			setInterval(function () {
-				this.activeUnit.down();
-				this.refreshActive();
-			}.bind(this), 1000);
+				if (this.status === 'playing') {
+					this.move('down');
+				};
+			}.bind(this), 500);
 
 			new _hammer2.default(this.$el).on('swipeleft swiperight', function (e) {
 				this.move(e.type.replace('swipe', ''));
@@ -10819,6 +10861,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			new _hammer2.default(document.querySelector('.btn.right')).on('tap', function () {
 				this.move('right');
 			}.bind(this));
+
+			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
+				this.move('down');
+			}.bind(this));
 		}
 	};
 
@@ -10826,7 +10872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn change\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>{{status}}</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn change\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
 /* 10 */
@@ -10846,7 +10892,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	function Shape(array) {
-		this._array = array || [];
+		if (!array || !array.length) throw 'need array';
+		this._array = JSON.parse(JSON.stringify(array));
 		this._array.forEach(function (n, i) {
 			this[i] = n;
 		}.bind(this));
@@ -10864,11 +10911,6 @@ return /******/ (function(modules) { // webpackBootstrap
 			});
 			return this;
 		},
-		down: function down() {
-			this.prev = this.toJson();
-			this.offset([0, 1]);
-			return this;
-		},
 		move: function move(d) {
 			if (d === 'left') {
 				this.prev = this.toJson();
@@ -10876,13 +10918,37 @@ return /******/ (function(modules) { // webpackBootstrap
 			} else if (d === 'right') {
 				this.prev = this.toJson();
 				this.offset([1, 0]);
+			} else if (d === 'down') {
+				this.prev = this.toJson();
+				this.offset([0, 1]);
 			} else {
 				throw 'except "left" or "right"';
 			};
 			return this;
 		},
+		clone: function clone() {
+			return new Shape(this.toJson());
+		},
+		specific: function specific(shape) {
+			var map = this.toMap();
+			var specific = [];
+			shape.forEach(function (n) {
+				delete map[n.toString()];
+			});
+			Object.keys(map).forEach(function (n) {
+				specific.push(map[n]);
+			});
+			return specific;
+		},
 		toJson: function toJson() {
 			return JSON.parse(JSON.stringify(this._array));
+		},
+		toMap: function toMap() {
+			var map = {};
+			this.forEach(function (n) {
+				map[n.toString()] = n;
+			});
+			return map;
 		},
 		setStage: function setStage(stage) {}
 	};
@@ -10896,7 +10962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		if (shape) {
 			return new Shape(shape);
 		} else {
-			return new Shape('L');
+			throw 'wrong shape "' + type + '"';
 		};
 	};
 

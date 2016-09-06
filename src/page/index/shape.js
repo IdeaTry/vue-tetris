@@ -7,7 +7,8 @@ var shapes = {
 };
 
 function Shape(array){
-	this._array = array || [];
+	if(!array || !array.length) throw 'need array';
+	this._array = JSON.parse(JSON.stringify(array));
 	this._array.forEach(function(n,i){
 		this[i] = n;
 	}.bind(this));
@@ -25,11 +26,6 @@ Shape.prototype = {
 		});
 		return this;
 	},
-	down: function(){
-		this.prev = this.toJson();
-		this.offset([0, 1]);
-		return this;
-	},
 	move: function(d){
 		if(d === 'left'){
 			this.prev = this.toJson();
@@ -37,13 +33,37 @@ Shape.prototype = {
 		}else if(d === 'right'){
 			this.prev = this.toJson();
 			this.offset([1, 0]);
+		}else if(d === 'down'){
+			this.prev = this.toJson();
+			this.offset([0, 1]);
 		}else{
 			throw 'except "left" or "right"';
 		};
 		return this;
 	},
+	clone: function(){
+		return new Shape(this.toJson());
+	},
+	specific: function(shape){
+		var map = this.toMap();
+		var specific = [];
+		shape.forEach(function(n){
+			delete map[n.toString()];
+		});
+		Object.keys(map).forEach(function(n){
+			specific.push(map[n]);
+		});
+		return specific;
+	},
 	toJson: function(){
 		return JSON.parse(JSON.stringify(this._array));
+	},
+	toMap: function(){
+		var map = {};
+		this.forEach(function(n){
+			map[n.toString()] = n;
+		});
+		return map;
 	},
 	setStage: function(stage){
 
@@ -59,7 +79,7 @@ Shape.create = function(type){
 	if(shape){
 		return new Shape(shape);
 	}else{
-		return new Shape('L');
+		throw 'wrong shape "' + type + '"';
 	};
 };
 
