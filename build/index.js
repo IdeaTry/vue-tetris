@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n  margin-top: 20px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 25px;\n  height: 25px;\n  border: 1px solid #fff;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #00f;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 25px;\n  height: 25px;\n  border: 1px solid #fff;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n", ""]);
 
 	// exports
 
@@ -10686,48 +10686,114 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 8 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+
+	var _shape = __webpack_require__(13);
+
+	var _shape2 = _interopRequireDefault(_shape);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	exports.default = {
 		data: function data() {
 			return {
+				cellWidth: 25,
 				width: 10,
 				height: 20,
 				rows: [],
-				cols: [],
-				cells: [],
-				units: []
+				activeUnit: null,
+				start: [0, 0]
 			};
 		},
 		methods: {
 			renderGrid: function renderGrid() {
-				var cols = [],
-				    rows = [],
-				    i;
+				var rows = [],
+				    row;
 
-				for (i = 0; i < this.width; i++) {
-					cols.push({ index: i });
+				for (var i = 0; i < this.height; i++) {
+					row = [];
+					for (var j = 0; j < this.width; j++) {
+						row.push({
+							row: i,
+							col: j,
+							cls: ''
+						});
+					};
+					rows.push(row);
 				};
-
-				for (i = 0; i < this.height; i++) {
-					rows.push({ index: i });
-				};
-
 				this.rows = rows;
-				this.cols = cols;
+			},
+
+			eachCell: function eachCell(fn) {
+				this.rows.forEach(function (cells) {
+					cells.forEach(function (cell) {
+						fn(cell);
+					});
+				});
+			},
+
+			findCell: function findCell(point) {
+				var col = point[0],
+				    row = point[1];
+				return (this.rows[row] || [])[col] || null;
+			},
+
+			findCells: function findCells(indexs, fn) {
+				var cells = [],
+				    cell,
+				    findCell = this.findCell.bind(this);
+				indexs.forEach(function (point) {
+					cell = findCell(point);
+					fn && fn(cell);
+					cells.push(cell);
+				});
+				return cells;
 			},
 			update: function update() {},
 			cellStatus: function cellStatus() {
-				return Math.random() > 0.5 ? ['active'] : [];
+				return [];
+			},
+
+			calSize: function calSize() {
+				var doc = document.documentElement,
+				    cw = doc.clientWidth,
+				    ch = doc.clientHeight,
+				    cellWidth = this.cellWidth + 3;
+
+				ch -= 100;
+
+				this.width = Math.floor(cw / cellWidth);
+				this.height = Math.floor(ch / cellWidth);
+				this.start = [Math.floor(this.width / 2), 0];
+			},
+			tick: function tick() {
+				var activeUnit = this.activeUnit;
+				activeUnit.down();
+				console.info(activeUnit.prev);
+				activeUnit.prev && this.findCells(activeUnit.prev, function (cell) {
+					cell.cls = '';
+				});
+				this.findCells(activeUnit, function (cell) {
+					cell.cls = 'active';
+				});
+			},
+			createShape: function createShape(type) {
+				var shape = _shape2.default.create(type);
+				shape.offset(this.start);
+				this.activeUnit = shape;
 			}
 		},
 		ready: function ready() {
+			this.calSize();
 			this.renderGrid();
+			this.createShape('T');
+			setInterval(this.tick, 1000);
 		}
 	};
 
@@ -10735,7 +10801,69 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\" @click=\"renderGrid()\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"col in cols\" :class=\"cellStatus(col.index, row.index).join(' ')\"></td>\n\t\t</tr>\n\t</table>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n</div>\n";
+
+/***/ },
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var shapes = {
+		'L': [[0, 0], [0, 1], [0, 2], [1, 2]],
+		'T': [[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]],
+		'7': [[1, 0], [2, 0], [2, 1], [2, 2]],
+		'1': [[1, 0], [1, 1], [1, 2]]
+	};
+
+	function Shape(array) {
+		this._array = array || [];
+		this._array.forEach(function (n, i) {
+			this[i] = n;
+		}.bind(this));
+	}
+
+	Shape.prototype = {
+		forEach: function forEach(fn) {
+			this._array.forEach(fn);
+		},
+		offset: function offset(_offset) {
+			this._array.forEach(function (n) {
+				n[0] += _offset[0];
+				n[1] += _offset[1];
+			});
+		},
+		down: function down() {
+			this.prev = this.toJson();
+			this.offset([0, 1]);
+		},
+		toJson: function toJson() {
+			return JSON.parse(JSON.stringify(this._array));
+		},
+		setStage: function setStage(stage) {}
+	};
+
+	Shape.create = function (type) {
+		var shape;
+		//
+		type = type.toUpperCase();
+		shape = shapes[type];
+		//
+		if (shape) {
+			return new Shape(shape);
+		} else {
+			return new Shape('L');
+		}
+	};
+
+	exports.default = Shape;
 
 /***/ }
 /******/ ])
