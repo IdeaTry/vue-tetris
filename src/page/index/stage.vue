@@ -35,11 +35,11 @@
 </style>
 
 <template>
-	<div class="stage">
+	<div class="stage" @click="renderGrid()">
 		<h1>coming soon...</h1>
 		<table>
 			<tr v-for="row in rows">
-				<td v-for="col in cols" :class="cellStatus().join(' ')"></td>
+				<td v-for="col in cols" :class="cellStatus(col.index, row.index).join(' ')"></td>
 			</tr>
 		</table>
 	</div>
