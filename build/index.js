@@ -10735,7 +10735,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"col in cols\" :class=\"cellStatus().join(' ')\"></td>\n\t\t</tr>\n\t</table>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\" @click=\"renderGrid()\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"col in cols\" :class=\"cellStatus(col.index, row.index).join(' ')\"></td>\n\t\t</tr>\n\t</table>\n</div>\n";
 
 /***/ }
 /******/ ])
