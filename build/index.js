@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 25px;\n  height: 25px;\n  border: 1px solid #fff;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n}\n.control .line .btn.left {\n  margin-right: 30px;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 25px;\n  height: 25px;\n  border: 1px solid #fff;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n}\n.control .line .btn:active {\n  background: #369;\n}\n.control .line .btn.left {\n  margin-right: 30px;\n}\n", ""]);
 
 	// exports
 
@@ -10826,7 +10826,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn change\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>coming soon...</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn change\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
 /* 10 */

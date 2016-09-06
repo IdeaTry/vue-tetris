@@ -58,6 +58,10 @@
 				border-radius 15px;
 			}
 
+			.btn:active{
+				background #369;
+			}
+
 			.btn.left{
 				margin-right 30px;
 			}
@@ -93,7 +97,7 @@
 	import Shape from './shape.js'
 	import Hammer from '../../lib/hammer.js'
 	//import { on } from '../../lib/dom.js'
-	
+
 	export default {
 		data: function(){
 			return {
