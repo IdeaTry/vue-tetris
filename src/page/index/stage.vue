@@ -56,14 +56,15 @@
 				display inline-block;
 				border 1px solid #CCC;
 				border-radius 15px;
+				background #DDD
 			}
 
 			.btn:active{
-				background #369;
+				background #393;
 			}
 
 			.btn.left{
-				margin-right 30px;
+				margin-right 40px;
 			}
 		}
 	}
