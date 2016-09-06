@@ -37,6 +37,32 @@
 	td.active{
 		background gray;
 	}
+
+	.control{
+		height 100px;
+		position relative;
+
+		.line:first-child{
+			margin-top 10px;
+		}
+		.line{
+			height 30px;
+			line-height 30px;
+			text-align center;
+			
+			.btn{
+				height 30px;
+				width 30px;
+				display inline-block;
+				border 1px solid #CCC;
+				border-radius 15px;
+			}
+
+			.btn.left{
+				margin-right 30px;
+			}
+		}
+	}
 </style>
 
 <template>
@@ -48,12 +74,26 @@
 				</td>
 			</tr>
 		</table>
+		<div class="control">
+			<div class="line">
+				<div class="btn change"></div>
+			</div>
+			<div class="line">
+				<div class="btn left"></div>
+				<div class="btn right"></div>
+			</div>
+			<div class="line">
+				<div class="btn down"></div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
 	import Shape from './shape.js'
-
+	import Hammer from '../../lib/hammer.js'
+	//import { on } from '../../lib/dom.js'
+	
 	export default {
 		data: function(){
 			return {
@@ -101,8 +141,10 @@
 					findCell = this.findCell.bind(this);
 				indexs.forEach(function(point){
 					cell = findCell(point);
-					fn && fn(cell);
-					cells.push(cell);
+					if(cell){
+						fn && fn(cell);
+						cells.push(cell);
+					};
 				});
 				return cells;
 			},
@@ -120,33 +162,54 @@
 					cellWidth = this.cellWidth + 3;
 
 				ch -= 100; // 减去h1的高度
+				ch -= 100; // 减去control的高度
 
 				this.width = Math.floor(cw/cellWidth);
 				this.height = Math.floor(ch/cellWidth);
 				this.start = [Math.floor(this.width/2), 0];
 			},
-			tick: function(){
-				var activeUnit = this.activeUnit;
-				activeUnit.down();
-				console.info(activeUnit.prev)
-				activeUnit.prev && this.findCells(activeUnit.prev, function(cell){
+			refreshActive: function(){
+				this.activeUnit.prev && this.findCells(this.activeUnit.prev, function(cell){
 					cell.cls = '';
 				});
-				this.findCells(activeUnit, function(cell){
+				this.findCells(this.activeUnit, function(cell){
 					cell.cls = 'active';
 				});
 			},
 			createShape: function(type){
-				var shape = Shape.create(type);
-				shape.offset(this.start);
-				this.activeUnit = shape;
+				this.activeUnit = Shape.create(type).offset(this.start);
+				this.refreshActive();
+			},
+			move: function(type){
+				if(this.activeUnit){
+					this.activeUnit.move(type);
+					this.refreshActive();
+				}
 			}
 		},
 		ready: function(){
 			this.calSize();
 			this.renderGrid();
 			this.createShape('T');
-			setInterval(this.tick, 1000);
+
+			//
+			setInterval(function(){
+				this.activeUnit.down();
+				this.refreshActive();
+			}.bind(this), 1000);
+			
+			//
+			new Hammer(this.$el).on('swipeleft swiperight', function(e){
+				this.move(e.type.replace('swipe', ''));
+			}.bind(this));
+
+			new Hammer(document.querySelector('.btn.left')).on('tap', function(){
+				this.move('left');
+			}.bind(this));
+
+			new Hammer(document.querySelector('.btn.right')).on('tap', function(){
+				this.move('right');
+			}.bind(this));
 		}
 	};
 </script>

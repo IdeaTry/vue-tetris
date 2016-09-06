@@ -16,16 +16,31 @@ function Shape(array){
 Shape.prototype = {
 	forEach: function(fn){
 		this._array.forEach(fn);
+		return this;
 	},
 	offset: function(offset){
 		this._array.forEach(function(n){
 			n[0] += offset[0];
 			n[1] += offset[1];
 		});
+		return this;
 	},
 	down: function(){
 		this.prev = this.toJson();
 		this.offset([0, 1]);
+		return this;
+	},
+	move: function(d){
+		if(d === 'left'){
+			this.prev = this.toJson();
+			this.offset([-1, 0]);
+		}else if(d === 'right'){
+			this.prev = this.toJson();
+			this.offset([1, 0]);
+		}else{
+			throw 'except "left" or "right"';
+		};
+		return this;
 	},
 	toJson: function(){
 		return JSON.parse(JSON.stringify(this._array));
@@ -45,7 +60,7 @@ Shape.create = function(type){
 		return new Shape(shape);
 	}else{
 		return new Shape('L');
-	}
+	};
 };
 
 export default Shape;
