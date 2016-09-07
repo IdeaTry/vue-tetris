@@ -81,7 +81,7 @@
 		</table>
 		<div class="control">
 			<div class="line">
-				<div class="btn change"></div>
+				<div class="btn roate"></div>
 			</div>
 			<div class="line">
 				<div class="btn left"></div>
@@ -201,6 +201,11 @@
 					this.refreshActive();
 				}
 			},
+			roate: function(){
+				if(this.activeUnit){
+					this.activeUnit.roate(); 
+				};
+			},
 			// 检查是否gameover
 			isGameOver: function(){
 				var failed = false;
@@ -263,6 +268,10 @@
 
 			new Hammer(document.querySelector('.btn.down')).on('tap', function(){
 				this.move('down');
+			}.bind(this));
+
+			new Hammer(document.querySelector('.btn.roate')).on('tap', function(){
+				this.roate();
 			}.bind(this));
 		}
 	};
