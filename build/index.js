@@ -10348,7 +10348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/page/index/stage.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(9)
+	__vue_template__ = __webpack_require__(12)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -10358,7 +10358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-22457d71/stage.vue"
+	  var id = "_v-02269551/stage.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 40px;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n  padding: 10px;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n  float: left;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.control {\n  height: 120px;\n  position: absolute;\n  bottom: 10px;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 40px;\n  width: 40px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 10px;\n}\n", ""]);
 
 	// exports
 
@@ -10694,13 +10694,15 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _shape = __webpack_require__(13);
+	var _shape = __webpack_require__(9);
 
 	var _shape2 = _interopRequireDefault(_shape);
 
-	var _hammer = __webpack_require__(14);
+	var _hammer = __webpack_require__(11);
 
 	var _hammer2 = _interopRequireDefault(_hammer);
+
+	var _dom = __webpack_require__(13);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10765,16 +10767,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			calSize: function calSize() {
 				var doc = document.documentElement,
-				    cw = doc.clientWidth,
-				    ch = doc.clientHeight,
-				    cellWidth = this.cellWidth + 3;
+				    cw = doc.clientWidth - 20,
+				    ch = doc.clientHeight - 20,
+				    cellWidth = this.cellWidth;
 
-				ch -= 100;
-				ch -= 100;
+				cw -= 100;
 
-				this.width = Math.floor(cw / cellWidth);
-				this.height = Math.floor(ch / cellWidth);
+				this.width = Math.floor(cw / (cellWidth + 2));
+				this.height = Math.floor(ch / (cellWidth + 1));
 				this.start = [Math.floor(this.width / 2), -3];
+
+				document.querySelector('.stage').style.height = ch - 20 + 'px';
 			},
 
 			refreshActive: function refreshActive() {
@@ -10806,6 +10809,13 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.activeUnit.move(type);
 					this.refreshActive();
 				}
+			},
+
+			moveBottom: function moveBottom() {
+				while (this.testMove(this.activeUnit.clone().move('down').specific(this.activeUnit))) {
+					this.activeUnit.move('down');
+					this.refreshActive();
+				};
 			},
 
 			roate: function roate() {
@@ -10849,6 +10859,8 @@ return /******/ (function(modules) { // webpackBootstrap
 		},
 
 		ready: function ready() {
+			var vm = this;
+
 			this.calSize();
 			this.renderGrid();
 
@@ -10880,20 +10892,28 @@ return /******/ (function(modules) { // webpackBootstrap
 			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
 				this.roate();
 			}.bind(this));
+
+			document.addEventListener('keydown', function (e) {
+				switch (e.key) {
+					case 'ArrowLeft':
+						return vm.move('left');
+					case 'ArrowRight':
+						return vm.move('right');
+					case 'ArrowDown':
+						return vm.move('down');
+					case 'ArrowUp':
+						return vm.roate();
+				}
+			});
+
+			document.addEventListener('touchstart', function (e) {
+				e.returnValue = false;
+			});
 		}
 	};
 
 /***/ },
 /* 9 */
-/***/ function(module, exports) {
-
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>{{status}}</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t\t<!-- {{[cell.col, cell.row]}} -->\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn roate\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
-
-/***/ },
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10902,7 +10922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _shapeRotator = __webpack_require__(15);
+	var _shapeRotator = __webpack_require__(10);
 
 	var _shapeRotator2 = _interopRequireDefault(_shapeRotator);
 
@@ -11061,7 +11081,85 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Shape;
 
 /***/ },
-/* 14 */
+/* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	// 对二维数组的形状进行旋转的工具类
+	var Rotator = function Rotator(opt) {
+		opt = opt || {};
+		this.width = opt.width || 3;
+	};
+
+	Rotator.prototype = {
+
+		// 对一个形状的二维数组进行向左旋转
+		left: function left(shape) {
+			var matrix = this.shapeToMatrix(shape, this.width);
+			var rows = [],
+			    row,
+			    w = this.width;
+
+			for (var j = 0; j < w; j++) {
+				row = [];
+				for (var i = w - 1; i >= 0; i--) {
+					row.push(matrix[i][j]);
+				};
+				rows.push(row);
+			};
+
+			return this.matrixToShape(rows);
+		},
+
+		// 把图形转成矩阵
+		shapeToMatrix: function shapeToMatrix(shape) {
+			var matrix = this.createMatrix();
+			shape.forEach(function (n) {
+				var x = n[0],
+				    y = n[1];
+				if (matrix[x] && matrix[x][y]) {
+					matrix[x][y] = 'yes';
+				};
+			});
+			return matrix;
+		},
+
+		// 把矩阵转成图形
+		matrixToShape: function matrixToShape(matrix) {
+			var shape = [];
+			matrix.forEach(function (col, x) {
+				col.forEach(function (cell, y) {
+					if (cell === 'yes') {
+						shape.push([x, y]);
+					};
+				});
+			});
+			return shape;
+		},
+
+		// 创建一个空的矩阵
+		createMatrix: function createMatrix() {
+			var matrix = [],
+			    row;
+			for (var i = 0; i < this.width; i++) {
+				row = [];
+				for (var j = 0; j < this.width; j++) {
+					row.push('no');
+				};
+				matrix.push(row);
+			};
+			return matrix;
+		}
+	};
+
+	exports.default = Rotator;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -13699,82 +13797,203 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(window, document, 'Hammer');
 
 /***/ },
-/* 15 */
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t\t<!-- {{[cell.col, cell.row]}} -->\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
+
+/***/ },
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	    value: true
 	});
-	// 对二维数组的形状进行旋转的工具类
-	var Rotator = function Rotator(opt) {
-		opt = opt || {};
-		this.width = opt.width || 3;
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+	// 检查是否数组或者NodeList
+	var isArray = function isArray(obj) {
+	    if (obj && typeof obj.length === 'number') {
+	        if (obj.constructor === NodeList) {
+	            return true;
+	        } else {
+	            return Array.isArray(obj);
+	        };
+	    };
+	    return false;
 	};
 
-	Rotator.prototype = {
+	// 遍历数组或者对象
+	// 依赖：isArray
+	var each = function each(obj, callback) {
 
-		// 对一个形状的二维数组进行向左旋转
-		left: function left(shape) {
-			var matrix = this.shapeToMatrix(shape, this.width);
-			var rows = [],
-			    row,
-			    w = this.width;
+	    if (typeof callback !== 'function') return;
 
-			for (var j = 0; j < w; j++) {
-				row = [];
-				for (var i = w - 1; i >= 0; i--) {
-					row.push(matrix[i][j]);
-				};
-				rows.push(row);
-			};
-
-			return this.matrixToShape(rows);
-		},
-
-		// 把图形转成矩阵
-		shapeToMatrix: function shapeToMatrix(shape) {
-			var matrix = this.createMatrix();
-			shape.forEach(function (n) {
-				var x = n[0],
-				    y = n[1];
-				if (matrix[x] && matrix[x][y]) {
-					matrix[x][y] = 'yes';
-				};
-			});
-			return matrix;
-		},
-
-		// 把矩阵转成图形
-		matrixToShape: function matrixToShape(matrix) {
-			var shape = [];
-			matrix.forEach(function (col, x) {
-				col.forEach(function (cell, y) {
-					if (cell === 'yes') {
-						shape.push([x, y]);
-					};
-				});
-			});
-			return shape;
-		},
-
-		// 创建一个空的矩阵
-		createMatrix: function createMatrix() {
-			var matrix = [],
-			    row;
-			for (var i = 0; i < this.width; i++) {
-				row = [];
-				for (var j = 0; j < this.width; j++) {
-					row.push('no');
-				};
-				matrix.push(row);
-			};
-			return matrix;
-		}
+	    if (isArray(obj)) {
+	        Array.prototype.forEach.call(obj, callback);
+	    } else if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object') {
+	        Object.keys(obj).forEach(function (key) {
+	            callback(obj[key], key);
+	        });
+	    };
 	};
 
-	exports.default = Rotator;
+	// querySelector
+	var query = function query(selector, context, callback) {
+	    var node;
+
+	    if (typeof context === 'function') {
+	        callback = context;
+	        context = document;
+	    };
+
+	    node = (context || document).querySelector(selector);
+
+	    if (typeof callback === 'function') {
+	        callback(node);
+	    };
+
+	    return node;
+	};
+
+	// 查找dom节点
+	// 依赖：each
+	// 用法1：var nodes = queryAll('h1')
+	// 用法2：var nodes = queryAll('h1', '#wrapper')
+	/* 用法3：
+	    queryAll('h1', function(node){
+	        node.style.display = 'none';
+	    });
+	*/
+	var queryAll = function queryAll(selector, context, callback) {
+	    var nodes;
+
+	    if (typeof context === 'function') {
+	        callback = context;
+	        context = document;
+	    };
+
+	    nodes = (context || document).querySelectorAll(selector);
+
+	    if (typeof callback === 'function') {
+	        each(nodes, callback);
+	    };
+
+	    return nodes;
+	};
+
+	// 用法1： css('div.item', 'color', 'red');
+	// 用法2： css('div.item', { color: 'red' });
+	// 用法3： css(document.querySelector('h1'), { color: 'red' });
+	var css = function css(node, attr, val) {
+	    var attrs = {},
+	        nodes = [];
+
+	    // 同时支持Node和选择器
+	    if (typeof node === 'string') {
+	        node = document.querySelectorAll(node);
+	    };
+
+	    // 同时支持Node和Node列表
+	    if (isArray(node)) {
+	        nodes = node;
+	    } else {
+	        nodes = [node];
+	    };
+
+	    // 3个参数为单个属性操作
+	    if (arguments.length === 3 && typeof attr === 'string') {
+	        attrs[attr] = val;
+	        return css(nodes, attrs);
+	    };
+
+	    // 2个参数为多个属性操作
+	    attrs = attr;
+
+	    // 为所有节点设置样式
+	    each(nodes, function (node) {
+	        if (!node || !node.style) return;
+
+	        Object.keys(attrs).forEach(function (key) {
+	            // backgroundColor 转成 background-color
+	            key = key.replace(/(-[a-z])/g, function (s) {
+	                return s.toUpperCase();
+	            });
+	            // 设置样式
+	            node.style[key] = attrs[key] + '';
+	        });
+	    });
+	};
+
+	// 添加class
+	var addClass = function addClass(node, cls, type) {
+	    var nodes = [];
+
+	    // 同时支持Node和选择器
+	    if (typeof node === 'string') {
+	        node = document.querySelectorAll(node);
+	    };
+
+	    // 同时支持Node和Node列表
+	    if (isArray(node)) {
+	        nodes = node;
+	    } else {
+	        nodes = [node];
+	    };
+
+	    // 为所有节点添加或删除class
+	    each(nodes, function (node) {
+	        if (!node || typeof node.className !== 'string') return;
+
+	        if (type === 'remove') {
+	            if (node.className.indexOf(cls) !== -1) {
+	                node.className = node.className.replace(cls, '');
+	            }
+	        } else {
+	            if (node.className.indexOf(cls) === -1) {
+	                node.className += ' ' + cls;
+	            }
+	        }
+	    });
+
+	    return nodes;
+	};
+
+	// 删除class
+	var removeClass = function removeClass(node, cls) {
+	    return addClass(node, cls, 'remove');
+	};
+
+	var on = function on(node, type, fn) {
+	    var nodes = [];
+
+	    // 同时支持Node和选择器
+	    if (typeof node === 'string') {
+	        node = document.querySelectorAll(node);
+	    };
+
+	    // 同时支持Node和Node列表
+	    if (isArray(node)) {
+	        nodes = node;
+	    } else {
+	        nodes = [node];
+	    };
+
+	    // 为所有节点添加或删除class
+	    each(nodes, function (node) {
+	        node.addEventListener(type, fn);
+	    });
+	};
+
+	exports.query = query;
+	exports.queryAll = queryAll;
+	exports.css = css;
+	exports.addClass = addClass;
+	exports.removeClass = removeClass;
+	exports.on = on;
 
 /***/ }
 /******/ ])

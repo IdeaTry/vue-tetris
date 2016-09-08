@@ -327,7 +327,7 @@
 					case 'ArrowRight':
 						return vm.move('right');
 					case 'ArrowDown':
-						return vm.moveBottom();
+						return vm.move('down');
 					case 'ArrowUp':
 						return vm.roate();
 				}
