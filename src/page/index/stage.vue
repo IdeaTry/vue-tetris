@@ -262,6 +262,7 @@
 		},
 
 		ready: function(){
+			var vm = this;
 
 			// 计算尺寸然后绘制表格
 			this.calSize();
@@ -298,6 +299,19 @@
 			new Hammer(document.querySelector('.btn.roate')).on('tap', function(){
 				this.roate();
 			}.bind(this));
+
+			document.addEventListener('keydown', function(e){
+				switch(e.key){
+					case 'ArrowLeft':
+						return vm.move('left');
+					case 'ArrowRight':
+						return vm.move('right');
+					case 'ArrowDown':
+						return vm.move('down');
+					case 'ArrowUp':
+						return vm.roate();
+				}
+			});
 		}
 	};
 </script>
