@@ -2,6 +2,7 @@
 	.stage{
 		width auto;
 		text-align center;
+		padding 10px;
 		
 		h1{
 			margin 0;
@@ -14,6 +15,7 @@
 			border-collapse collapse;
 			background #EEE;
 			margin 0 auto;
+			float left;
 		}
 		
 		td{
@@ -43,21 +45,29 @@
 		background gray;
 	}
 
-	.control{
-		height 100px;
+	.side{
+		width 100px;
+		height 100%;
+		float right;
 		position relative;
+	}
+
+	.control{
+		height 120px;
+		position absolute;
+		bottom 10px;
 
 		.line:first-child{
 			margin-top 10px;
 		}
 		.line{
-			height 30px;
-			line-height 30px;
+			height 40px;
+			line-height 40px;
 			text-align center;
 			
 			.btn{
-				height 30px;
-				width 30px;
+				height 40px;
+				width 40px;
 				display inline-block;
 				border 1px solid #CCC;
 				border-radius 15px;
@@ -69,7 +79,7 @@
 			}
 
 			.btn.left{
-				margin-right 40px;
+				margin-right 10px;
 			}
 		}
 	}
@@ -77,7 +87,6 @@
 
 <template>
 	<div class="stage">
-		<h1>{{status}}</h1>
 		<table>
 			<tr v-for="row in rows">
 				<td v-for="cell in row" :class="cell.cls">
@@ -85,16 +94,19 @@
 				</td>
 			</tr>
 		</table>
-		<div class="control">
-			<div class="line">
-				<div class="btn roate"></div>
-			</div>
-			<div class="line">
-				<div class="btn left"></div>
-				<div class="btn right"></div>
-			</div>
-			<div class="line">
-				<div class="btn down"></div>
+		<div class="side">
+			<h1>{{status}}</h1>
+			<div class="control">
+				<div class="line">
+					<div class="btn roate"></div>
+				</div>
+				<div class="line">
+					<div class="btn left"></div>
+					<div class="btn right"></div>
+				</div>
+				<div class="line">
+					<div class="btn down"></div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -103,7 +115,7 @@
 <script>
 	import Shape from './shape.js'
 	import Hammer from '../../lib/hammer.js'
-	//import { on } from '../../lib/dom.js'
+	import { css } from '../../lib/dom.js'
 
 	export default {
 		data: function(){
@@ -169,16 +181,17 @@
 			// 计算画布尺寸：格子的数量
 			calSize: function(){
 				var doc = document.documentElement,
-					cw = doc.clientWidth ,
-					ch = doc.clientHeight ,
-					cellWidth = this.cellWidth + 3;
+					cw = doc.clientWidth - 20,
+					ch = doc.clientHeight - 20,
+					cellWidth = this.cellWidth ;
 
-				ch -= 100; // 减去h1的高度
-				ch -= 100; // 减去control的高度
+				cw -= 100; // 减去side的宽度
 
-				this.width = Math.floor(cw/cellWidth);
-				this.height = Math.floor(ch/cellWidth);
+				this.width = Math.floor(cw/(cellWidth + 2));
+				this.height = Math.floor(ch/(cellWidth + 1));
 				this.start = [Math.floor(this.width/2), -3];
+
+				document.querySelector('.stage').style.height = (ch - 20) + 'px';
 			},
 
 			// 刷新显示：清空轨迹，并在新的位置显示
@@ -215,6 +228,13 @@
 					this.activeUnit.move(type);
 					this.refreshActive();
 				}
+			},
+
+			moveBottom: function(){
+				while(this.testMove(this.activeUnit.clone().move('down').specific(this.activeUnit))){
+					this.activeUnit.move('down');
+					this.refreshActive();
+				};
 			},
 
 			// 旋转（向左）
@@ -307,10 +327,14 @@
 					case 'ArrowRight':
 						return vm.move('right');
 					case 'ArrowDown':
-						return vm.move('down');
+						return vm.moveBottom();
 					case 'ArrowUp':
 						return vm.roate();
 				}
+			});
+
+			document.addEventListener('touchstart', function(e){
+				e.returnValue = false;
 			});
 		}
 	};
