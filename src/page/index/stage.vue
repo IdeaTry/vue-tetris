@@ -23,7 +23,7 @@
 			font-size 9px
 			text-align center
 			color #CCC
-			padding 0
+			padding 0 0 0 1px
 		}
 	}
 	
@@ -171,7 +171,7 @@
 				var doc = document.documentElement,
 					cw = doc.clientWidth ,
 					ch = doc.clientHeight ,
-					cellWidth = this.cellWidth + 2;
+					cellWidth = this.cellWidth + 3;
 
 				ch -= 100; // 减去h1的高度
 				ch -= 100; // 减去control的高度
