@@ -10358,7 +10358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-02269551/stage.vue"
+	  var id = "_v-22457d71/stage.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 25px;\n  height: 25px;\n  border: 1px solid #fff;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 40px;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 40px;\n}\n", ""]);
 
 	// exports
 
@@ -10694,11 +10694,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
-	var _shape = __webpack_require__(10);
+	var _shape = __webpack_require__(13);
 
 	var _shape2 = _interopRequireDefault(_shape);
 
-	var _hammer = __webpack_require__(11);
+	var _hammer = __webpack_require__(14);
 
 	var _hammer2 = _interopRequireDefault(_hammer);
 
@@ -10707,12 +10707,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = {
 		data: function data() {
 			return {
-				cellWidth: 25,
+				cellWidth: 20,
 				width: 10,
 				height: 20,
 				rows: [],
 				activeUnit: null,
-				start: [0, -3],
+				start: [0, 0],
 				status: 'stop'
 			};
 		},
@@ -10767,7 +10767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				var doc = document.documentElement,
 				    cw = doc.clientWidth,
 				    ch = doc.clientHeight,
-				    cellWidth = this.cellWidth + 3;
+				    cellWidth = this.cellWidth + 2;
 
 				ch -= 100;
 				ch -= 100;
@@ -10786,8 +10786,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 			},
 
-			createShape: function createShape(type) {
-				this.activeUnit = _shape2.default.create(type).offset(this.start);
+			createShape: function createShape() {
+				this.activeUnit = _shape2.default.random().offset(this.start);
 				this.refreshActive();
 			},
 
@@ -10798,7 +10798,7 @@ return /******/ (function(modules) { // webpackBootstrap
 							if (this.isGameOver()) {
 								this.status = 'game over';
 							};
-							this.createShape('T');
+							this.createShape();
 						};
 						return;
 					};
@@ -10806,6 +10806,16 @@ return /******/ (function(modules) { // webpackBootstrap
 					this.activeUnit.move(type);
 					this.refreshActive();
 				}
+			},
+
+			roate: function roate() {
+				if (this.activeUnit) {
+					if (!this.testMove(this.activeUnit.clone().roate().specific(this.activeUnit))) {
+						return;
+					};
+					this.activeUnit.roate();
+					this.refreshActive();
+				};
 			},
 
 			isGameOver: function isGameOver() {
@@ -10837,6 +10847,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				return !reject;
 			}
 		},
+
 		ready: function ready() {
 			this.calSize();
 			this.renderGrid();
@@ -10865,6 +10876,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
 				this.move('down');
 			}.bind(this));
+
+			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
+				this.roate();
+			}.bind(this));
 		}
 	};
 
@@ -10872,11 +10887,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 9 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>{{status}}</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn change\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<h1>{{status}}</h1>\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t\t<!-- {{[cell.col, cell.row]}} -->\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"control\">\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn roate\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn left\"></div>\n\t\t\t<div class=\"btn right\"></div>\n\t\t</div>\n\t\t<div class=\"line\">\n\t\t\t<div class=\"btn down\"></div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -10884,33 +10902,70 @@ return /******/ (function(modules) { // webpackBootstrap
 		value: true
 	});
 
+	var _shapeRotator = __webpack_require__(15);
+
+	var _shapeRotator2 = _interopRequireDefault(_shapeRotator);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// 预置的一些形状
 	var shapes = {
 		'L': [[0, 0], [0, 1], [0, 2], [1, 2]],
-		'T': [[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]],
+		'T': [[0, 0], [1, 0], [2, 0], [1, 1]],
 		'7': [[1, 0], [2, 0], [2, 1], [2, 2]],
-		'1': [[1, 0], [1, 1], [1, 2]]
+		'1': [[1, 0], [1, 1], [1, 2]],
+		'+': [[0, 1], [1, 0], [1, 1], [2, 1], [1, 2]]
 	};
 
+	// 所有预置的形状的key
+	var shapeKeys = Object.keys(shapes);
+
+	// 形状对象，包含若干个格子，可以移动或者旋转，可以复制
 	function Shape(array) {
-		if (!array || !array.length) throw 'need array';
-		this._array = JSON.parse(JSON.stringify(array));
-		this._array.forEach(function (n, i) {
-			this[i] = n;
-		}.bind(this));
+		if (array) {
+			this.set(array);
+		};
+		this.rotator = new _shapeRotator2.default({
+			width: 3
+		});
+		this.x = 0;
+		this.y = 0;
 	}
 
 	Shape.prototype = {
-		forEach: function forEach(fn) {
-			this._array.forEach(fn);
+
+		// 用一个二维数组来设定形状的所有的格子
+		set: function set(array) {
+			if (!array) throw 'need array';
+			this._array = JSON.parse(JSON.stringify(array));
+			this._array.forEach(function (n, i) {
+				this[i] = n;
+			}.bind(this));
+
 			return this;
 		},
+
+		// 遍历格子
+		forEach: function forEach(fn) {
+			this._array.forEach(fn);
+
+			return this;
+		},
+
+		// 对形状（的所有格子）进行位移
 		offset: function offset(_offset) {
+			this.x += _offset[0];
+			this.y += _offset[1];
+			//
 			this._array.forEach(function (n) {
 				n[0] += _offset[0];
 				n[1] += _offset[1];
 			});
+
 			return this;
 		},
+
+		// 向左、右，或者向下移动
 		move: function move(d) {
 			if (d === 'left') {
 				this.prev = this.toJson();
@@ -10924,11 +10979,36 @@ return /******/ (function(modules) { // webpackBootstrap
 			} else {
 				throw 'except "left" or "right"';
 			};
+
 			return this;
 		},
-		clone: function clone() {
-			return new Shape(this.toJson());
+
+		// 旋转（向左）
+		roate: function roate() {
+			var clone = this.clone(),
+			    x = this.x,
+			    y = this.y;
+			//
+			clone.offset([-x, -y]);
+			clone.set(this.rotator.left(clone.toJson()));
+			clone.offset([x, y]);
+			//
+			this.prev = this.toJson();
+			this.set(clone.toJson());
+
+			return this;
 		},
+
+		// 克隆一个形状，可用于在移动和旋转之前的边缘和阻碍的检测
+		clone: function clone() {
+			var clone = new Shape(this.toJson());
+			clone.x = this.x;
+			clone.y = this.y;
+
+			return clone;
+		},
+
+		// 跟另外一个形状进行比较，并返回比较对象所没有的点，用于清除轨迹
 		specific: function specific(shape) {
 			var map = this.toMap();
 			var specific = [];
@@ -10938,21 +11018,27 @@ return /******/ (function(modules) { // webpackBootstrap
 			Object.keys(map).forEach(function (n) {
 				specific.push(map[n]);
 			});
+
 			return specific;
 		},
+
+		// 转成纯数组格式的数据，便于计算
 		toJson: function toJson() {
 			return JSON.parse(JSON.stringify(this._array));
 		},
+
+		// 转成键值对，便于计算
 		toMap: function toMap() {
 			var map = {};
 			this.forEach(function (n) {
 				map[n.toString()] = n;
 			});
+
 			return map;
-		},
-		setStage: function setStage(stage) {}
+		}
 	};
 
+	// 创建一个指定的形状
 	Shape.create = function (type) {
 		var shape;
 		//
@@ -10966,10 +11052,16 @@ return /******/ (function(modules) { // webpackBootstrap
 		};
 	};
 
+	// 创建一个随机的形状
+	Shape.random = function () {
+		var type = shapeKeys[parseInt(shapeKeys.length * Math.random(), 10)];
+		return Shape.create(type);
+	};
+
 	exports.default = Shape;
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -13605,6 +13697,84 @@ return /******/ (function(modules) { // webpackBootstrap
 	        window[exportName] = Hammer;
 	    }
 	})(window, document, 'Hammer');
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	// 对二维数组的形状进行旋转的工具类
+	var Rotator = function Rotator(opt) {
+		opt = opt || {};
+		this.width = opt.width || 3;
+	};
+
+	Rotator.prototype = {
+
+		// 对一个形状的二维数组进行向左旋转
+		left: function left(shape) {
+			var matrix = this.shapeToMatrix(shape, this.width);
+			var rows = [],
+			    row,
+			    w = this.width;
+
+			for (var j = 0; j < w; j++) {
+				row = [];
+				for (var i = w - 1; i >= 0; i--) {
+					row.push(matrix[i][j]);
+				};
+				rows.push(row);
+			};
+
+			return this.matrixToShape(rows);
+		},
+
+		// 把图形转成矩阵
+		shapeToMatrix: function shapeToMatrix(shape) {
+			var matrix = this.createMatrix();
+			shape.forEach(function (n) {
+				var x = n[0],
+				    y = n[1];
+				if (matrix[x] && matrix[x][y]) {
+					matrix[x][y] = 'yes';
+				};
+			});
+			return matrix;
+		},
+
+		// 把矩阵转成图形
+		matrixToShape: function matrixToShape(matrix) {
+			var shape = [];
+			matrix.forEach(function (col, x) {
+				col.forEach(function (cell, y) {
+					if (cell === 'yes') {
+						shape.push([x, y]);
+					};
+				});
+			});
+			return shape;
+		},
+
+		// 创建一个空的矩阵
+		createMatrix: function createMatrix() {
+			var matrix = [],
+			    row;
+			for (var i = 0; i < this.width; i++) {
+				row = [];
+				for (var j = 0; j < this.width; j++) {
+					row.push('no');
+				};
+				matrix.push(row);
+			};
+			return matrix;
+		}
+	};
+
+	exports.default = Rotator;
 
 /***/ }
 /******/ ])
