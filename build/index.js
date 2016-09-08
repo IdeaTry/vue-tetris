@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 40px;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.control {\n  height: 100px;\n  position: relative;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 30px;\n  line-height: 30px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 30px;\n  width: 30px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 40px;\n}\n", ""]);
 
 	// exports
 
@@ -10767,7 +10767,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				var doc = document.documentElement,
 				    cw = doc.clientWidth,
 				    ch = doc.clientHeight,
-				    cellWidth = this.cellWidth + 2;
+				    cellWidth = this.cellWidth + 3;
 
 				ch -= 100;
 				ch -= 100;
