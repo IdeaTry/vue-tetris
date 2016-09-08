@@ -7,6 +7,7 @@
 			margin 0;
 			height 100px;
 			line-height 100px;
+			font-size: 14px;
 		}
 		
 		table{
@@ -16,9 +17,13 @@
 		}
 		
 		td{
-			width 25px;
-			height 25px;
+			width 20px;
+			height 20px;
 			border 1px solid #FFF;
+			font-size 9px
+			text-align center
+			color #CCC
+			padding 0
 		}
 	}
 	
@@ -76,6 +81,7 @@
 		<table>
 			<tr v-for="row in rows">
 				<td v-for="cell in row" :class="cell.cls">
+					<!-- {{[cell.col, cell.row]}} -->
 				</td>
 			</tr>
 		</table>
@@ -102,16 +108,17 @@
 	export default {
 		data: function(){
 			return {
-				cellWidth: 25,
+				cellWidth: 20,
 				width: 10,
 				height: 20,
 				rows: [],
 				activeUnit: null,
-				start: [0, -3],
+				start: [0, 0],
 				status: 'stop'
 			};
 		},
 		methods: {
+
 			// 绘制表格
 			renderGrid: function(){
 				var rows = [], row;
@@ -129,6 +136,7 @@
 				};
 				this.rows = rows;
 			},
+
 			// 遍历所有格子
 			eachCell: function(fn){
 				this.rows.forEach(function(cells){
@@ -137,11 +145,13 @@
 					});
 				});
 			},
+
 			// 查找指定格子
 			findCell: function(point){
 				var col = point[0], row = point[1];
 				return (this.rows[row] || [])[col] || null;
 			},
+
 			// 查找一组格子
 			findCells: function(indexs, fn){
 				var cells = [], cell, 
@@ -155,12 +165,13 @@
 				});
 				return cells;
 			},
+
 			// 计算画布尺寸：格子的数量
 			calSize: function(){
 				var doc = document.documentElement,
 					cw = doc.clientWidth ,
 					ch = doc.clientHeight ,
-					cellWidth = this.cellWidth + 3;
+					cellWidth = this.cellWidth + 2;
 
 				ch -= 100; // 减去h1的高度
 				ch -= 100; // 减去control的高度
@@ -169,7 +180,8 @@
 				this.height = Math.floor(ch/cellWidth);
 				this.start = [Math.floor(this.width/2), -3];
 			},
-			// 刷新状态
+
+			// 刷新显示：清空轨迹，并在新的位置显示
 			refreshActive: function(){
 				this.activeUnit.prev && this.findCells(this.activeUnit.prev, function(cell){
 					cell.cls = '';
@@ -178,21 +190,24 @@
 					cell.cls = 'active';
 				});
 			},
+
 			// 创建形状
-			createShape: function(type){
-				this.activeUnit = Shape.create(type).offset(this.start);
+			createShape: function(){
+				this.activeUnit = Shape.random().offset(this.start);
 				this.refreshActive();
 			},
+
 			// 移动：左、右、下
 			move: function(type){
 				if(this.activeUnit){
-					// testMove
+					// test move
 					if(!this.testMove(this.activeUnit.clone().move(type).specific(this.activeUnit))){
 						if(type === 'down'){
+							// test gameover
 							if(this.isGameOver()){
 								this.status = 'game over';
 							};
-							this.createShape('T');
+							this.createShape();
 						};
 						return;
 					};
@@ -201,11 +216,19 @@
 					this.refreshActive();
 				}
 			},
+
+			// 旋转（向左）
 			roate: function(){
 				if(this.activeUnit){
+					// test roate
+					if(!this.testMove(this.activeUnit.clone().roate().specific(this.activeUnit))){
+						return;
+					};
 					this.activeUnit.roate(); 
+					this.refreshActive();
 				};
 			},
+
 			// 检查是否gameover
 			isGameOver: function(){
 				var failed = false;
@@ -214,7 +237,8 @@
 				});
 				return failed;
 			},
-			// 检查是否可移动
+
+			// 检查移动或旋转是否允许
 			testMove: function(shape){
 				var reject = false, cell;
 				
@@ -236,6 +260,7 @@
 				return !reject;
 			}
 		},
+
 		ready: function(){
 
 			// 计算尺寸然后绘制表格
