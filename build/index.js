@@ -10348,7 +10348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] src/page/index/stage.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(12)
+	__vue_template__ = __webpack_require__(13)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -10401,7 +10401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n  padding: 10px;\n}\n.stage h1 {\n  margin: 0;\n  height: 100px;\n  line-height: 100px;\n  font-size: 14px;\n}\n.stage table {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n  float: left;\n}\n.stage td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.control {\n  height: 120px;\n  position: absolute;\n  bottom: 10px;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 40px;\n  width: 40px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 10px;\n}\n", ""]);
+	exports.push([module.id, ".stage {\n  width: auto;\n  text-align: center;\n  padding: 10px;\n}\n.stage h1 {\n  margin: 0;\n  font-size: 14px;\n  padding: 1em;\n}\n.stage table.main,\n.stage table.preview {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.stage table.main td,\n.stage table.preview td {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\n.stage table.main {\n  float: left;\n}\ntd.red {\n  background: #f00;\n}\ntd.orange {\n  background: #ffa500;\n}\ntd.green {\n  background: #008000;\n}\ntd.blue {\n  background: #00f;\n}\ntd.active {\n  background: #808080;\n}\n.side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.control {\n  height: 120px;\n  position: absolute;\n  bottom: 10px;\n}\n.control .line:first-child {\n  margin-top: 10px;\n}\n.control .line {\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n}\n.control .line .btn {\n  height: 40px;\n  width: 40px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn:active {\n  background: #393;\n}\n.control .line .btn.left {\n  margin-right: 10px;\n}\n", ""]);
 
 	// exports
 
@@ -10702,7 +10702,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _hammer2 = _interopRequireDefault(_hammer);
 
-	var _dom = __webpack_require__(13);
+	var _dom = __webpack_require__(12);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10713,12 +10713,30 @@ return /******/ (function(modules) { // webpackBootstrap
 				width: 10,
 				height: 20,
 				rows: [],
-				activeUnit: null,
+				current: null,
 				start: [0, 0],
-				status: 'stop'
+				status: 'stop',
+				shapeWidth: 3,
+				prevRows: [],
+				prev: null
 			};
 		},
 		methods: {
+			renderPrevGrid: function renderPrevGrid() {
+				var rows = [],
+				    row;
+
+				for (var i = 0; i < this.shapeWidth; i++) {
+					row = [];
+					for (var j = 0; j < this.shapeWidth; j++) {
+						row.push({ row: i, col: j, cls: '' });
+					};
+					rows.push(row);
+				};
+
+				this.prevRows = rows;
+			},
+
 			renderGrid: function renderGrid() {
 				var rows = [],
 				    row;
@@ -10726,42 +10744,41 @@ return /******/ (function(modules) { // webpackBootstrap
 				for (var i = 0; i < this.height; i++) {
 					row = [];
 					for (var j = 0; j < this.width; j++) {
-						row.push({
-							row: i,
-							col: j,
-							cls: ''
-						});
+						row.push({ row: i, col: j, cls: '' });
 					};
 					rows.push(row);
 				};
+
 				this.rows = rows;
 			},
 
-			eachCell: function eachCell(fn) {
-				this.rows.forEach(function (cells) {
+			eachCell: function eachCell(rows, fn) {
+				rows.forEach(function (cells) {
 					cells.forEach(function (cell) {
 						fn(cell);
 					});
 				});
 			},
 
-			findCell: function findCell(point) {
+			findCell: function findCell(rows, point) {
 				var col = point[0],
 				    row = point[1];
-				return (this.rows[row] || [])[col] || null;
+				return (rows[row] || [])[col] || null;
 			},
 
-			findCells: function findCells(indexs, fn) {
+			findCells: function findCells(rows, indexs, fn) {
 				var cells = [],
 				    cell,
 				    findCell = this.findCell.bind(this);
+
 				indexs.forEach(function (point) {
-					cell = findCell(point);
+					cell = findCell(rows, point);
 					if (cell) {
 						fn && fn(cell);
 						cells.push(cell);
 					};
 				});
+
 				return cells;
 			},
 
@@ -10780,57 +10797,71 @@ return /******/ (function(modules) { // webpackBootstrap
 				document.querySelector('.stage').style.height = ch - 20 + 'px';
 			},
 
-			refreshActive: function refreshActive() {
-				this.activeUnit.prev && this.findCells(this.activeUnit.prev, function (cell) {
+			refreshPrev: function refreshPrev() {
+				this.eachCell(this.prevRows, function (cell) {
 					cell.cls = '';
 				});
-				this.findCells(this.activeUnit, function (cell) {
+				this.findCells(this.prevRows, this.prev, function (cell) {
+					cell.cls = 'active';
+					console.info(cell);
+				});
+			},
+
+			refreshActive: function refreshActive() {
+				this.current.prev && this.findCells(this.rows, this.current.prev, function (cell) {
+					cell.cls = '';
+				});
+				this.findCells(this.rows, this.current, function (cell) {
 					cell.cls = 'active';
 				});
 			},
 
 			createShape: function createShape() {
-				this.activeUnit = _shape2.default.random().offset(this.start);
+				this.current = this.prev || _shape2.default.random();
+				this.current.offset(this.start);
 				this.refreshActive();
+
+				this.prev = _shape2.default.random();
+				this.refreshPrev();
 			},
 
 			move: function move(type) {
-				if (this.activeUnit) {
-					if (!this.testMove(this.activeUnit.clone().move(type).specific(this.activeUnit))) {
-						if (type === 'down') {
-							if (this.isGameOver()) {
-								this.status = 'game over';
-							};
-							this.createShape();
-						};
-						return;
-					};
+				if (!this.current) return;
 
-					this.activeUnit.move(type);
-					this.refreshActive();
-				}
+				if (!this.testMove(this.current.clone().move(type).specific(this.current))) {
+					if (type === 'down') {
+						if (this.isGameOver()) {
+							this.status = 'game over';
+						};
+						this.createShape();
+					};
+					return;
+				};
+
+				this.current.move(type);
+				this.refreshActive();
 			},
 
 			moveBottom: function moveBottom() {
-				while (this.testMove(this.activeUnit.clone().move('down').specific(this.activeUnit))) {
-					this.activeUnit.move('down');
+				while (this.testMove(this.current.clone().move('down').specific(this.current))) {
+					this.current.move('down');
 					this.refreshActive();
 				};
 			},
 
 			roate: function roate() {
-				if (this.activeUnit) {
-					if (!this.testMove(this.activeUnit.clone().roate().specific(this.activeUnit))) {
-						return;
-					};
-					this.activeUnit.roate();
-					this.refreshActive();
+				if (!this.current) return;
+
+				if (!this.testMove(this.current.clone().roate().specific(this.current))) {
+					return;
 				};
+				this.current.roate();
+				this.refreshActive();
 			},
 
 			isGameOver: function isGameOver() {
 				var failed = false;
-				this.activeUnit && this.activeUnit.forEach(function (n) {
+				this.current && this.current.forEach(function (n) {
 					failed = failed || n[1] < 0;
 				});
 				return failed;
@@ -10838,7 +10869,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			testMove: function testMove(shape) {
 				var reject = false,
-				    cell;
+				    cell,
+				    rows = this.rows;
 
 				shape.forEach(function (n) {
 					if (reject) return;
@@ -10846,7 +10878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					if (n[0] < 0 || n[0] >= this.width || n[1] >= this.height) {
 						reject = true;
 					} else {
-						cell = this.findCell(n);
+						cell = this.findCell(rows, n);
 						if (cell && cell.cls === 'active') {
 							reject = true;
 							console.info('阻挡');
@@ -10861,39 +10893,47 @@ return /******/ (function(modules) { // webpackBootstrap
 		ready: function ready() {
 			var vm = this;
 
-			this.calSize();
-			this.renderGrid();
+			vm.renderPrevGrid();
 
-			this.createShape('T');
-			this.status = 'playing';
+			vm.calSize();
+			vm.renderGrid();
+
+			vm.createShape();
+			vm.status = 'playing';
 
 			setInterval(function () {
-				if (this.status === 'playing') {
-					this.move('down');
+				if (vm.status === 'playing') {
+					vm.move('down');
 				};
-			}.bind(this), 500);
+			}, 500);
 
-			new _hammer2.default(this.$el).on('swipeleft swiperight', function (e) {
-				this.move(e.type.replace('swipe', ''));
-			}.bind(this));
+			new _hammer2.default(vm.$el).on('swipeleft swiperight', function (e) {
+				if (vm.status !== 'playing') return;
+				vm.move(e.type.replace('swipe', ''));
+			});
 
 			new _hammer2.default(document.querySelector('.btn.left')).on('tap', function () {
-				this.move('left');
-			}.bind(this));
+				if (vm.status !== 'playing') return;
+				vm.move('left');
+			});
 
 			new _hammer2.default(document.querySelector('.btn.right')).on('tap', function () {
-				this.move('right');
-			}.bind(this));
+				if (vm.status !== 'playing') return;
+				vm.move('right');
+			});
 
 			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
-				this.move('down');
-			}.bind(this));
+				if (vm.status !== 'playing') return;
+				vm.move('down');
+			});
 
 			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
-				this.roate();
-			}.bind(this));
+				if (vm.status !== 'playing') return;
+				vm.roate();
+			});
 
 			document.addEventListener('keydown', function (e) {
+				if (vm.status !== 'playing') return;
 				switch (e.key) {
 					case 'ArrowLeft':
 						return vm.move('left');
@@ -10934,7 +10974,9 @@ return /******/ (function(modules) { // webpackBootstrap
 		'T': [[0, 0], [1, 0], [2, 0], [1, 1]],
 		'7': [[1, 0], [2, 0], [2, 1], [2, 2]],
 		'1': [[1, 0], [1, 1], [1, 2]],
-		'+': [[0, 1], [1, 0], [1, 1], [2, 1], [1, 2]]
+		//'+': [[0,1],[1,0],[1,1],[2,1],[1,2]],
+		'田': [[0, 0], [0, 1], [1, 0], [1, 1]]
+
 	};
 
 	// 所有预置的形状的key
@@ -13800,12 +13842,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table>\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\">\n\t\t\t\t<!-- {{[cell.col, cell.row]}} -->\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -13994,6 +14030,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.addClass = addClass;
 	exports.removeClass = removeClass;
 	exports.on = on;
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table class=\"main\">\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div>\n\t\t\t<table class=\"preview\">\n\t\t\t\t<tr v-for=\"row in prevRows\">\n\t\t\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ])
