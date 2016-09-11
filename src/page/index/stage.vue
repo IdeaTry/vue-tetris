@@ -96,7 +96,7 @@
 			</tr>
 		</table>
 		<div class="side">
-			<h1>{{status}}</h1>
+			<h1>{{score}}</h1>
 			<div>
 				<table class="preview">
 					<tr v-for="row in prevRows">
@@ -137,7 +137,8 @@
 				status: 'stop',
 				shapeWidth: 3,
 				prevRows: [],
-				prev: null
+				prev: null,
+				score: 0
 			};
 		},
 		methods: {
@@ -334,8 +335,10 @@
 				};
 			},
 
-			testDissolve: function(){
+			testDissolve: function(scoreTime){
 				var dissolveRowIndex = null;
+				
+				scoreTime = scoreTime || 1;
 
 				this.rows.forEach(function(row, y){
 					var hasEmpty = false;
@@ -353,10 +356,15 @@
 
 				if(dissolveRowIndex !== null){
 					this.dissolve(dissolveRowIndex);
-					this.testDissolve();
+					this.addScore(scoreTime);
+					this.testDissolve(scoreTime+1);
 				};
 
 				return this;
+			},
+
+			addScore: function(time){
+				this.score += this.width * time;
 			},
 
 			suspend: function(){
