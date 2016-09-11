@@ -10803,7 +10803,6 @@ return /******/ (function(modules) { // webpackBootstrap
 				});
 				this.findCells(this.prevRows, this.prev, function (cell) {
 					cell.val = 1;
-					console.info(cell);
 				});
 			},
 
@@ -10883,7 +10882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						reject = true;
 					} else {
 						cell = this.findCell(rows, n);
-						if (cell && cell.cls === 'active') {
+						if (cell && cell.val === 1) {
 							reject = true;
 							console.info('阻挡');
 						};
@@ -10893,7 +10892,20 @@ return /******/ (function(modules) { // webpackBootstrap
 				return !reject;
 			},
 
-			dissolve: function dissolve(y) {},
+			dissolve: function dissolve(rowIndex) {
+				var rows = this.rows,
+				    prevRow;
+				rows[0].forEach(function (cell) {
+					cell.val = 0;
+				});
+				while (rowIndex > 0) {
+					prevRow = rows[rowIndex - 1];
+					rows[rowIndex].forEach(function (cell, colIndex) {
+						cell.val = prevRow[colIndex].val;
+					});
+					rowIndex--;
+				};
+			},
 
 			testDissolve: function testDissolve() {
 				var dissolveRowIndex = null;
@@ -10907,8 +10919,15 @@ return /******/ (function(modules) { // webpackBootstrap
 						hasEmpty = hasEmpty || cell.val === 0;
 					});
 
-					dissolveRowIndex = y;
+					if (!hasEmpty) {
+						dissolveRowIndex = y;
+					};
 				});
+
+				if (dissolveRowIndex !== null) {
+					this.dissolve(dissolveRowIndex);
+					this.testDissolve();
+				};
 
 				return this;
 			},
