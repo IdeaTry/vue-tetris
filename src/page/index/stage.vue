@@ -92,7 +92,7 @@
 	<div class="stage">
 		<table class="main">
 			<tr v-for="row in rows">
-				<td v-for="cell in row" :class="cell.cls"></td>
+				<td v-for="cell in row" :class="cell.val == 1 ? 'active' : ''"></td>
 			</tr>
 		</table>
 		<div class="side">
@@ -164,7 +164,7 @@
 				for(var i = 0; i < this.height; i++){
 					row = [];
 					for(var j = 0; j < this.width; j++){
-						row.push({ row: i, col: j, cls: '' });
+						row.push({ row: i, col: j, val: 0, cls: '' });
 					};
 					rows.push(row);
 				};
@@ -221,10 +221,10 @@
 			// 刷新预览
 			refreshPrev: function(){
 				this.eachCell(this.prevRows, function(cell){
-					cell.cls = '';
+					cell.val = 0;
 				});
 				this.findCells(this.prevRows, this.prev, function(cell){
-					cell.cls = 'active';
+					cell.val = 1;
 					console.info(cell)
 				});
 			},
@@ -232,10 +232,10 @@
 			// 刷新显示：清空轨迹，并在新的位置显示
 			refreshActive: function(){
 				this.current.prev && this.findCells(this.rows, this.current.prev, function(cell){
-					cell.cls = '';
+					cell.val = 0;
 				});
 				this.findCells(this.rows, this.current, function(cell){
-					cell.cls = 'active';
+					cell.val = 1;
 				});
 			},
 
@@ -326,7 +326,21 @@
 			},
 
 			testDissolve: function(){
+				var dissolveRowIndex = null;
 
+				this.rows.forEach(function(row, y){
+					var hasEmpty = false;
+					
+					if(dissolveRowIndex !== null) return;
+
+					row.forEach(function(cell){
+						hasEmpty = hasEmpty || cell.val === 0;
+					});
+					
+					dissolveRowIndex = y;
+				});
+
+				return this;
 			},
 
 			suspend: function(){
