@@ -10744,7 +10744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				for (var i = 0; i < this.height; i++) {
 					row = [];
 					for (var j = 0; j < this.width; j++) {
-						row.push({ row: i, col: j, cls: '' });
+						row.push({ row: i, col: j, val: 0, cls: '' });
 					};
 					rows.push(row);
 				};
@@ -10799,20 +10799,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			refreshPrev: function refreshPrev() {
 				this.eachCell(this.prevRows, function (cell) {
-					cell.cls = '';
+					cell.val = 0;
 				});
 				this.findCells(this.prevRows, this.prev, function (cell) {
-					cell.cls = 'active';
+					cell.val = 1;
 					console.info(cell);
 				});
 			},
 
 			refreshActive: function refreshActive() {
 				this.current.prev && this.findCells(this.rows, this.current.prev, function (cell) {
-					cell.cls = '';
+					cell.val = 0;
 				});
 				this.findCells(this.rows, this.current, function (cell) {
-					cell.cls = 'active';
+					cell.val = 1;
 				});
 			},
 
@@ -10895,7 +10895,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			dissolve: function dissolve(y) {},
 
-			testDissolve: function testDissolve() {},
+			testDissolve: function testDissolve() {
+				var dissolveRowIndex = null;
+
+				this.rows.forEach(function (row, y) {
+					var hasEmpty = false;
+
+					if (dissolveRowIndex !== null) return;
+
+					row.forEach(function (cell) {
+						hasEmpty = hasEmpty || cell.val === 0;
+					});
+
+					dissolveRowIndex = y;
+				});
+
+				return this;
+			},
 
 			suspend: function suspend() {
 				if (this.status !== 'playing') return;
@@ -14060,7 +14076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table class=\"main\">\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div>\n\t\t\t<table class=\"preview\">\n\t\t\t\t<tr v-for=\"row in prevRows\">\n\t\t\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table class=\"main\">\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.val == 1 ? 'active' : ''\"></td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div>\n\t\t\t<table class=\"preview\">\n\t\t\t\t<tr v-for=\"row in prevRows\">\n\t\t\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ])
