@@ -225,7 +225,6 @@
 				});
 				this.findCells(this.prevRows, this.prev, function(cell){
 					cell.val = 1;
-					console.info(cell)
 				});
 			},
 
@@ -311,7 +310,7 @@
 						reject = true;
 					}else{
 						cell = this.findCell(rows, n);
-						if(cell && cell.cls === 'active'){
+						if(cell && cell.val === 1){
 							reject = true;
 							console.info('阻挡');
 						};
@@ -321,8 +320,18 @@
 				return !reject;
 			},
 
-			dissolve: function(y){
-
+			dissolve: function(rowIndex){
+				var rows = this.rows, prevRow;
+				rows[0].forEach(function(cell){
+					cell.val = 0;
+				});
+				while(rowIndex > 0){
+					prevRow = rows[rowIndex - 1];
+					rows[rowIndex].forEach(function(cell, colIndex){
+						cell.val = prevRow[colIndex].val;
+					});
+					rowIndex--;
+				};
 			},
 
 			testDissolve: function(){
@@ -336,9 +345,16 @@
 					row.forEach(function(cell){
 						hasEmpty = hasEmpty || cell.val === 0;
 					});
-					
-					dissolveRowIndex = y;
+
+					if(!hasEmpty){
+						dissolveRowIndex = y;
+					};
 				});
+
+				if(dissolveRowIndex !== null){
+					this.dissolve(dissolveRowIndex);
+					this.testDissolve();
+				};
 
 				return this;
 			},
