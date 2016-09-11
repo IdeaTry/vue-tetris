@@ -10718,7 +10718,8 @@ return /******/ (function(modules) { // webpackBootstrap
 				status: 'stop',
 				shapeWidth: 3,
 				prevRows: [],
-				prev: null
+				prev: null,
+				score: 0
 			};
 		},
 		methods: {
@@ -10907,8 +10908,10 @@ return /******/ (function(modules) { // webpackBootstrap
 				};
 			},
 
-			testDissolve: function testDissolve() {
+			testDissolve: function testDissolve(scoreTime) {
 				var dissolveRowIndex = null;
+
+				scoreTime = scoreTime || 1;
 
 				this.rows.forEach(function (row, y) {
 					var hasEmpty = false;
@@ -10926,10 +10929,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 				if (dissolveRowIndex !== null) {
 					this.dissolve(dissolveRowIndex);
-					this.testDissolve();
+					this.addScore(scoreTime);
+					this.testDissolve(scoreTime + 1);
 				};
 
 				return this;
+			},
+
+			addScore: function addScore(time) {
+				this.score += this.width * time;
 			},
 
 			suspend: function suspend() {
@@ -14095,7 +14103,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 13 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table class=\"main\">\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.val == 1 ? 'active' : ''\"></td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{status}}</h1>\n\t\t<div>\n\t\t\t<table class=\"preview\">\n\t\t\t\t<tr v-for=\"row in prevRows\">\n\t\t\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"stage\">\n\t<table class=\"main\">\n\t\t<tr v-for=\"row in rows\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.val == 1 ? 'active' : ''\"></td>\n\t\t</tr>\n\t</table>\n\t<div class=\"side\">\n\t\t<h1>{{score}}</h1>\n\t\t<div>\n\t\t\t<table class=\"preview\">\n\t\t\t\t<tr v-for=\"row in prevRows\">\n\t\t\t\t\t<td v-for=\"cell in row\" :class=\"cell.cls\"></td>\n\t\t\t\t</tr>\n\t\t\t</table>\n\t\t</div>\n\t\t<div class=\"control\">\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn roate\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn left\"></div>\n\t\t\t\t<div class=\"btn right\"></div>\n\t\t\t</div>\n\t\t\t<div class=\"line\">\n\t\t\t\t<div class=\"btn down\"></div>\n\t\t\t</div>\n\t\t</div>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ])
