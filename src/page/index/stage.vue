@@ -258,7 +258,11 @@
 						// test gameover
 						if(this.isGameOver()){
 							this.status = 'game over';
+							return;
 						};
+						//
+						this.testDissolve();
+						//
 						this.createShape();
 					};
 					return;
@@ -315,7 +319,26 @@
 				}.bind(this));
 				// 如果未被阻挡则测试通过
 				return !reject;
+			},
+
+			dissolve: function(y){
+
+			},
+
+			testDissolve: function(){
+
+			},
+
+			suspend: function(){
+				if(this.status !== 'playing') return;
+				this.status = 'suspend';
+			},
+
+			resume: function(){
+				if(this.status !== 'suspend') return;
+				this.status = 'playing';
 			}
+			
 		},
 
 		ready: function(){
@@ -366,16 +389,22 @@
 			});
 
 			document.addEventListener('keydown', function(e){
-				if(vm.status !== 'playing') return;
 				switch(e.key){
 					case 'ArrowLeft':
-						return vm.move('left');
+						return vm.status === 'playing' && vm.move('left');
 					case 'ArrowRight':
-						return vm.move('right');
+						return vm.status === 'playing' && vm.move('right');
 					case 'ArrowDown':
-						return vm.move('down');
+						return vm.status === 'playing' && vm.move('down');
 					case 'ArrowUp':
-						return vm.roate();
+						return vm.status === 'playing' && vm.roate();
+					case ' ':
+						if(vm.status === 'suspend'){
+							vm.resume();
+						}else if(vm.status === 'playing'){
+							vm.suspend();
+						};
+						return;
 				}
 			});
 
