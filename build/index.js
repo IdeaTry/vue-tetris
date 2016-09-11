@@ -10832,7 +10832,11 @@ return /******/ (function(modules) { // webpackBootstrap
 					if (type === 'down') {
 						if (this.isGameOver()) {
 							this.status = 'game over';
+							return;
 						};
+
+						this.testDissolve();
+
 						this.createShape();
 					};
 					return;
@@ -10887,7 +10891,22 @@ return /******/ (function(modules) { // webpackBootstrap
 				}.bind(this));
 
 				return !reject;
+			},
+
+			dissolve: function dissolve(y) {},
+
+			testDissolve: function testDissolve() {},
+
+			suspend: function suspend() {
+				if (this.status !== 'playing') return;
+				this.status = 'suspend';
+			},
+
+			resume: function resume() {
+				if (this.status !== 'suspend') return;
+				this.status = 'playing';
 			}
+
 		},
 
 		ready: function ready() {
@@ -10933,16 +10952,22 @@ return /******/ (function(modules) { // webpackBootstrap
 			});
 
 			document.addEventListener('keydown', function (e) {
-				if (vm.status !== 'playing') return;
 				switch (e.key) {
 					case 'ArrowLeft':
-						return vm.move('left');
+						return vm.status === 'playing' && vm.move('left');
 					case 'ArrowRight':
-						return vm.move('right');
+						return vm.status === 'playing' && vm.move('right');
 					case 'ArrowDown':
-						return vm.move('down');
+						return vm.status === 'playing' && vm.move('down');
 					case 'ArrowUp':
-						return vm.roate();
+						return vm.status === 'playing' && vm.roate();
+					case ' ':
+						if (vm.status === 'suspend') {
+							vm.resume();
+						} else if (vm.status === 'playing') {
+							vm.suspend();
+						};
+						return;
 				}
 			});
 
