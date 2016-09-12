@@ -71,7 +71,7 @@ Shape.prototype = {
 			this.prev = this.toJson();
 			this.offset([0, 1]);
 		}else{
-			throw 'except "left" or "right"';
+			throw 'except "left" or "right" or "down"';
 		};
 
 		return this;
