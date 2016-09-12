@@ -1,54 +1,66 @@
 <style lang="stylus" scoped>
+	
 	.control{
-		height 120px;
-		position absolute;
-		bottom 10px;
-
-		.line:first-child{
-			margin-top 10px;
+		padding 5px 0 0 0;
+		margin 0 1em;
+		
+		.control-content{
+			width: 200px;
+			height: 120px;
+			background: #FFF;
+			margin: 0 auto;
 		}
-		.line{
-			height 40px;
-			line-height 40px;
-			text-align center;
+
+		table{
+			border-collapse: collapse;
+			width: 100%;
+
+			td{
+				border: 1px solid #FFF;
+				vertical-align: middle;
+				width: 33.33%;
+				text-align: center;
+				color: #FFF;
+			}
+
+			td.roate,
+			td.down{
+				height: 50px;
+			}
+
+			td.touch-style{
+				background: #FFF;
+			}
+		}
 			
-			.btn{
-				height 40px;
-				width 40px;
-				display inline-block;
-				border 1px solid #CCC;
-				border-radius 15px;
-				background #DDD
-			}
-
-			.btn:active{
-				background #393;
-			}
-
-			.btn.left{
-				margin-right 10px;
-			}
-		}
 	}
 </style>
 
 <template>
 	<div class="control">
-		<div class="line">
-			<div class="btn roate"></div>
-		</div>
-		<div class="line">
-			<div class="btn left"></div>
-			<div class="btn right"></div>
-		</div>
-		<div class="line">
-			<div class="btn down"></div>
-		</div>
+		<table>
+			<tr>
+				<td class="btn left" rowspan="2">←</td>
+				<td class="btn roate"></td>
+				<td class="btn right" rowspan="2">→</td>
+			</tr>
+			<tr>
+				<td class="btn down">↓</td>
+			</tr>
+		</table>
 	</div>
 </template>
 
 <script>
 	import Hammer from '../lib/hammer.js'
+	import { addClass, removeClass, on } from '../lib/dom.js'
+
+	function touchStyle(tag){
+		addClass(tag, 'touch-style');
+		setTimeout(function(){
+			removeClass(this, 'touch-style');
+		}.bind(tag), 100);
+	}
 
 	export default {
 		props: ['status'],
@@ -97,6 +109,11 @@
 				if(vm.status !== 'playing') return;
 				vm.roate();
 			});
+			//
+			on('td.btn', 'touchstart', function(e){
+				touchStyle(e.target);
+			});
+			
 
 			// 键盘控制
 			document.addEventListener('keydown', function(e){
@@ -119,7 +136,7 @@
 				}
 			});
 
-			// @page
+			// 防止微信的页面上下拖动效果
 			document.addEventListener('touchstart', function(e){
 				e.returnValue = false;
 			});

@@ -101,6 +101,10 @@
 				vm.$emit('score', times);
 			});
 
+			c.on('gameover', function(){
+				vm.$emit('gameover');
+			});
+
 			this.reset();
 		}
 	};

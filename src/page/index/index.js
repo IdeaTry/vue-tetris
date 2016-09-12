@@ -3,10 +3,10 @@ import Vue from 'vue'
 var vm = new Vue({
 	el: 'body',
 	template: `
-		<game></game>
+		<tetris></tetris>
 	`,
 	replace: false,
 	components: {
-		game: require('../../components/game.vue')
+		tetris: require('../../components/tetris.vue')
 	}
 })

@@ -64,10 +64,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var vm = new _vue2.default({
 		el: 'body',
-		template: '\n\t\t<game></game>\n\t',
+		template: '\n\t\t<tetris></tetris>\n\t',
 		replace: false,
 		components: {
-			game: __webpack_require__(3)
+			tetris: __webpack_require__(46)
 		}
 	});
 
@@ -10338,75 +10338,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(4)
-	__vue_script__ = __webpack_require__(8)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/components/game.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(45)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-cfa473aa/game.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(5);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./game.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./game.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".game {\n  max-width: 400px;\n  margin-left: auto;\n  margin-right: auto;\n  background: #e3e3e3;\n  overflow: hidden;\n}\n.game .main {\n  float: left;\n}\n.game .side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.game .handles {\n  height: 120px;\n  position: absolute;\n  bottom: 10px;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
+/* 3 */,
+/* 4 */,
+/* 5 */,
 /* 6 */
 /***/ function(module, exports) {
 
@@ -10685,134 +10619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _shape = __webpack_require__(9);
-
-	var _shape2 = _interopRequireDefault(_shape);
-
-	var _dom = __webpack_require__(11);
-
-	var _interval = __webpack_require__(12);
-
-	var _interval2 = _interopRequireDefault(_interval);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-		data: function data() {
-			return {
-				cellWidth: 20,
-				width: 0,
-				height: 0,
-				start: [0, 0],
-				status: 'stop',
-				shapeWidth: 3,
-				current: null,
-				preview: null,
-				score: 0,
-				timer: null,
-				dropTime: 500
-			};
-		},
-		components: {
-			chessboard: __webpack_require__(13),
-			score: __webpack_require__(34),
-			handles: __webpack_require__(39)
-		},
-		methods: {
-			size: function size() {
-				var doc = document.documentElement;
-
-				this.width = Math.min(doc.clientWidth, 400) - 20 - 100;
-				this.height = doc.clientHeight;
-
-				this.col = Math.floor(this.width / (this.cellWidth + 2));
-				this.row = Math.floor(this.height / (this.cellWidth + 1));
-
-				this.start = [Math.floor(this.col / 2) - Math.floor(this.shapeWidth / 2), -this.shapeWidth];
-			},
-
-			render: function render() {
-				(0, _dom.css)('.game', {
-					height: this.height + 'px'
-				});
-				(0, _dom.css)('.main', {
-					height: this.height - 20 + 'px',
-					width: this.width + 'px'
-				});
-			},
-
-			add: function add() {
-				this.current = this.preview || _shape2.default.random();
-				this.$refs.preview.reset();
-				this.preview = _shape2.default.random();
-			},
-
-			restart: function restart() {
-				this.status = 'playing';
-				this.add();
-			}
-
-		},
-
-		created: function created() {
-			this.size();
-		},
-
-		ready: function ready() {
-			var vm = this,
-			    handles = vm.$refs.handles,
-			    chessboard = vm.$refs.chessboard;
-
-			vm.render();
-
-			vm.timer = (0, _interval2.default)(function () {
-				if (vm.status === 'playing') {
-					chessboard.drop();
-				};
-			}, vm.dropTime);
-
-			chessboard.$on('stop', function (shape) {
-				vm.add();
-				vm.timer.time = vm.dropTime;
-			});
-
-			chessboard.$on('score', function (times) {
-				vm.score += vm.col * times;
-			});
-
-			handles.$on('move', function (d) {
-				chessboard.move(d);
-
-				if (d == 'down') {
-					vm.timer.time -= vm.timer.time * 0.2;
-				};
-			});
-			handles.$on('roate', function () {
-				chessboard.roate();
-			});
-			handles.$on('suspend', function () {
-				if (vm.status === 'playing') {
-					vm.status = 'suspend';
-				};
-			});
-			handles.$on('resume', function () {
-				vm.status = 'playing';
-			});
-
-			vm.restart();
-		}
-	};
-
-/***/ },
+/* 8 */,
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -11434,6 +11241,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 			c.on('score', function (times) {
 				vm.$emit('score', times);
+			});
+
+			c.on('gameover', function () {
+				vm.$emit('gameover');
 			});
 
 			this.reset();
@@ -12137,7 +11948,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "h1[_v-993748ae] {\n  margin: 0;\n  font-size: 14px;\n  padding: 1em;\n}\n", ""]);
+	exports.push([module.id, "h1[_v-993748ae] {\n  margin: 20px auto 0 auto;\n  font-size: 14px;\n  padding: 6px 0;\n  text-align: center;\n  border-radius: 3px;\n  width: 65px;\n  color: #f60;\n}\n", ""]);
 
 	// exports
 
@@ -12159,7 +11970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n<h1 _v-993748ae=\"\">{{score}}</h1>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n<h1 _v-993748ae=\"\">{{score}}</h1>\n";
 
 /***/ },
 /* 39 */
@@ -12225,7 +12036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".control[_v-aac6e7bc] {\n  height: 120px;\n  position: absolute;\n  bottom: 10px;\n}\n.control .line[_v-aac6e7bc]:first-child {\n  margin-top: 10px;\n}\n.control .line[_v-aac6e7bc] {\n  height: 40px;\n  line-height: 40px;\n  text-align: center;\n}\n.control .line .btn[_v-aac6e7bc] {\n  height: 40px;\n  width: 40px;\n  display: inline-block;\n  border: 1px solid #ccc;\n  border-radius: 15px;\n  background: #ddd;\n}\n.control .line .btn[_v-aac6e7bc]:active {\n  background: #393;\n}\n.control .line .btn.left[_v-aac6e7bc] {\n  margin-right: 10px;\n}\n", ""]);
+	exports.push([module.id, ".control[_v-aac6e7bc] {\n  padding: 5px 0 0 0;\n  margin: 0 1em;\n}\n.control .control-content[_v-aac6e7bc] {\n  width: 200px;\n  height: 120px;\n  background: #fff;\n  margin: 0 auto;\n}\n.control table[_v-aac6e7bc] {\n  border-collapse: collapse;\n  width: 100%;\n}\n.control table td[_v-aac6e7bc] {\n  border: 1px solid #fff;\n  vertical-align: middle;\n  width: 33.33%;\n  text-align: center;\n  color: #fff;\n}\n.control table td.roate[_v-aac6e7bc],\n.control table td.down[_v-aac6e7bc] {\n  height: 50px;\n}\n.control table td.touch-style[_v-aac6e7bc] {\n  background: #fff;\n}\n", ""]);
 
 	// exports
 
@@ -12244,7 +12055,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _hammer2 = _interopRequireDefault(_hammer);
 
+	var _dom = __webpack_require__(11);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function touchStyle(tag) {
+		(0, _dom.addClass)(tag, 'touch-style');
+		setTimeout(function () {
+			(0, _dom.removeClass)(this, 'touch-style');
+		}.bind(tag), 100);
+	}
 
 	exports.default = {
 		props: ['status'],
@@ -12290,6 +12110,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
 				if (vm.status !== 'playing') return;
 				vm.roate();
+			});
+
+			(0, _dom.on)('td.btn', 'touchstart', function (e) {
+				touchStyle(e.target);
 			});
 
 			document.addEventListener('keydown', function (e) {
@@ -14960,13 +14784,278 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"control\" _v-aac6e7bc=\"\">\n\t<div class=\"line\" _v-aac6e7bc=\"\">\n\t\t<div class=\"btn roate\" _v-aac6e7bc=\"\"></div>\n\t</div>\n\t<div class=\"line\" _v-aac6e7bc=\"\">\n\t\t<div class=\"btn left\" _v-aac6e7bc=\"\"></div>\n\t\t<div class=\"btn right\" _v-aac6e7bc=\"\"></div>\n\t</div>\n\t<div class=\"line\" _v-aac6e7bc=\"\">\n\t\t<div class=\"btn down\" _v-aac6e7bc=\"\"></div>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"control\" _v-aac6e7bc=\"\">\n\t<table _v-aac6e7bc=\"\">\n\t\t<tbody _v-aac6e7bc=\"\"><tr _v-aac6e7bc=\"\">\n\t\t\t<td class=\"btn left\" rowspan=\"2\" _v-aac6e7bc=\"\">←</td>\n\t\t\t<td class=\"btn roate\" _v-aac6e7bc=\"\"></td>\n\t\t\t<td class=\"btn right\" rowspan=\"2\" _v-aac6e7bc=\"\">→</td>\n\t\t</tr>\n\t\t<tr _v-aac6e7bc=\"\">\n\t\t\t<td class=\"btn down\" _v-aac6e7bc=\"\">↓</td>\n\t\t</tr>\n\t</tbody></table>\n</div>\n";
 
 /***/ },
-/* 45 */
+/* 45 */,
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(47)
+	__vue_script__ = __webpack_require__(49)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/components/tetris.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(50)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-304366dc/tetris.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(48);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".game {\n  max-width: 400px;\n  margin-left: auto;\n  margin-right: auto;\n  background: #e3e3e3;\n  overflow: hidden;\n  position: relative;\n}\n.game .main {\n  float: left;\n}\n.game .side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.game .side .play {\n  width: 65px;\n  padding: 5px 0;\n  border: 1px solid #999;\n  margin: 20px auto 0 auto;\n  border-radius: 3px;\n  text-align: center;\n  color: #999;\n  background: #fff;\n}\n.game .handles {\n  height: 150px;\n  width: 100%;\n  position: absolute;\n  bottom: 0;\n  left: 0;\n}\n.game .msg {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  background: #ccc;\n  opacity: 0.8;\n  z-index: 10;\n}\n.game .msg span {\n  display: inline-block;\n  padding: 20px;\n  width: 50%;\n  margin: 200px auto;\n  font-size: 20px;\n  background: #fff;\n  border-radius: 5px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _shape = __webpack_require__(9);
+
+	var _shape2 = _interopRequireDefault(_shape);
+
+	var _dom = __webpack_require__(11);
+
+	var _interval = __webpack_require__(12);
+
+	var _interval2 = _interopRequireDefault(_interval);
+
+	var _hammer = __webpack_require__(43);
+
+	var _hammer2 = _interopRequireDefault(_hammer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initSpeed = 2;
+
+	exports.default = {
+		data: function data() {
+			return {
+				cellWidth: 20,
+				shapeWidth: 3,
+				width: 0,
+				height: 0,
+				startOffset: [0, 0],
+				current: null,
+				preview: null,
+				score: 0,
+				timer: null,
+				speed: initSpeed,
+				status: 'ready',
+				msg: 'TOUCH START'
+			};
+		},
+		components: {
+			chessboard: __webpack_require__(13),
+			score: __webpack_require__(34),
+			handles: __webpack_require__(39)
+		},
+		methods: {
+			size: function size() {
+				var doc = document.documentElement;
+
+				this.width = Math.min(doc.clientWidth, 400) - 20;
+				this.height = doc.clientHeight - 20;
+
+				this.width -= 100;
+				this.height -= 150;
+
+				this.col = Math.floor(this.width / (this.cellWidth + 2));
+				this.row = Math.floor(this.height / (this.cellWidth + 1));
+
+				this.startOffset = [Math.floor(this.col / 2) - Math.floor(this.shapeWidth / 2), -this.shapeWidth];
+			},
+
+			render: function render() {
+				(0, _dom.css)('.game', {
+					height: document.documentElement.clientHeight + 'px'
+				});
+				(0, _dom.css)('.main', {
+					height: this.height + 'px',
+					width: this.width + 'px'
+				});
+				(0, _dom.css)('.side', {
+					height: this.height + 'px'
+				});
+			},
+
+			add: function add() {
+				this.status = 'playing';
+				this.current = this.preview || _shape2.default.random();
+				this.$refs.preview.reset();
+				this.preview = _shape2.default.random();
+			},
+
+			restart: function restart() {
+				this.$refs.chessboard.reset();
+				this.score = 0;
+				this.status = 'playing';
+				this.add();
+			},
+
+			toggleMsg: function toggleMsg() {
+				var vm = this;
+
+				switch (this.status) {
+					case 'ready':
+						vm.status = 'playing';
+						vm.add();
+						break;
+					case 'gameover':
+						vm.restart();
+						break;
+					case 'suspend':
+						vm.status = 'playing';
+						break;
+				};
+
+				return this;
+			}
+
+		},
+
+		watch: {
+			status: function status(_status) {
+				this.msg = {
+					suspend: 'SUSPEND',
+					gameover: 'GAME OVER'
+				}[_status] || '';
+			},
+			score: function score(_score) {
+				if (_score < 100) {
+					return;
+				};
+
+				this.speed = initSpeed + Math.floor(_score / 100);
+
+				this.timer.time = 1000 / this.speed;
+			}
+		},
+
+		created: function created() {
+			this.size();
+		},
+
+		ready: function ready() {
+			var vm = this,
+			    handles = vm.$refs.handles,
+			    chessboard = vm.$refs.chessboard;
+
+			vm.render();
+
+			vm.timer = (0, _interval2.default)(function () {
+				if (vm.status === 'playing') {
+					chessboard.drop();
+				};
+			}, 1000 / vm.speed);
+
+			chessboard.$on('stop', function (shape) {
+				vm.add();
+				vm.timer.time = 1000 / vm.speed;
+			});
+
+			chessboard.$on('score', function (times) {
+				vm.score += vm.col * times;
+			});
+
+			chessboard.$on('gameover', function (times) {
+				vm.status = 'gameover';
+			});
+
+			handles.$on('move', function (d) {
+				chessboard.move(d);
+
+				if (d == 'down') {
+					vm.timer.time -= vm.timer.time * 0.3;
+				};
+			});
+			handles.$on('roate', function () {
+				chessboard.roate();
+			});
+			handles.$on('suspend', function () {
+				if (vm.status === 'playing') {
+					vm.status = 'suspend';
+				};
+			});
+			handles.$on('resume', function () {
+				vm.status = 'playing';
+			});
+
+			new _hammer2.default((0, _dom.query)('.play')).on('tap', function (e) {
+				if (vm.status === 'suspend') {
+					vm.status = 'playing';
+				} else if (vm.status === 'playing') {
+					vm.status = 'suspend';
+				};
+			});
+
+			new _hammer2.default((0, _dom.query)('.msg')).on('tap', function (e) {
+				vm.toggleMsg();
+			});
+		}
+	};
+
+/***/ },
+/* 50 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"game\">\n\n\t<chessboard class=\"main\" v-ref:chessboard\n\t\t:col=\"col\" :row=\"row\" :current=\"current\" :start=\"start\">\n\t</chessboard>\n\n\t<div class=\"side\">\n\n\t\t<chessboard v-ref:preview \n\t\t\t:col=\"3\" :row=\"3\" :current=\"preview\">\n\t\t</chessboard>\n\n\t\t<score :score=\"score\"></score>\n\n\t\t<handles class=\"handles\" v-ref:handles \n\t\t\t:status=\"status\">\n\t\t</handles>\n\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"game\">\n\n\t<chessboard class=\"main\" v-ref:chessboard\n\t\t:col=\"col\" :row=\"row\" :current=\"current\" :start=\"startOffset\">\n\t</chessboard>\n\n\t<div class=\"side\">\n\n\t\t<chessboard v-ref:preview \n\t\t\t:col=\"3\" :row=\"3\" :current=\"preview\">\n\t\t</chessboard>\n\n\t\t<score :score=\"score\"></score>\n\n\t\t<div class=\"play\" v-show=\"status === 'playing'\">\n\t\t\t<div class=\"suspend\">暂停</div>\n\t\t</div>\n\n\t</div>\n\n\t<div class=\"handles\">\n\t\t<handles v-ref:handles \n\t\t\t:status=\"status\">\n\t\t</handles>\n\t</div>\n\n\t<div class=\"msg\" v-show=\"msg\">\n\t\t<span>{{msg}}</span>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ])
