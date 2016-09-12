@@ -10358,7 +10358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-02269551/stage.vue"
+	  var id = "_v-22457d71/stage.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -10969,26 +10969,28 @@ return /******/ (function(modules) { // webpackBootstrap
 				};
 			}, 500);
 
-			new _hammer2.default(vm.$el).on('swipeleft swiperight', function (e) {
+			new _hammer2.default(vm.$el).on('swipeleft swiperight swipedown swipeup', function (e) {
 				if (vm.status !== 'playing') return;
-				vm.move(e.type.replace('swipe', ''));
-			});
+
+				if (e.type === 'swipeup') {
+					vm.roate();
+				} else {
+					vm.move(e.type.replace('swipe', ''));
+				};
+			}).get('swipe').set({ direction: _hammer2.default.DIRECTION_ALL });
 
 			new _hammer2.default(document.querySelector('.btn.left')).on('tap', function () {
 				if (vm.status !== 'playing') return;
 				vm.move('left');
 			});
-
 			new _hammer2.default(document.querySelector('.btn.right')).on('tap', function () {
 				if (vm.status !== 'playing') return;
 				vm.move('right');
 			});
-
 			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
 				if (vm.status !== 'playing') return;
 				vm.move('down');
 			});
-
 			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
 				if (vm.status !== 'playing') return;
 				vm.roate();
@@ -11107,7 +11109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.prev = this.toJson();
 				this.offset([0, 1]);
 			} else {
-				throw 'except "left" or "right"';
+				throw 'except "left" or "right" or "down"';
 			};
 
 			return this;
