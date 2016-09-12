@@ -400,32 +400,36 @@
 				};
 			}, 500);
 			
-			// 按钮事件
-			new Hammer(vm.$el).on('swipeleft swiperight', function(e){
+			// 手势控制
+			new Hammer(vm.$el).on('swipeleft swiperight swipedown swipeup', function(e){
 				if(vm.status !== 'playing') return;
-				vm.move(e.type.replace('swipe', ''));
-			});
 
+				if(e.type === 'swipeup'){
+					vm.roate();
+				}else{
+					vm.move(e.type.replace('swipe', ''));
+				};
+			}).get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+			// 按钮控制
 			new Hammer(document.querySelector('.btn.left')).on('tap', function(){
 				if(vm.status !== 'playing') return;
 				vm.move('left');
 			});
-
 			new Hammer(document.querySelector('.btn.right')).on('tap', function(){
 				if(vm.status !== 'playing') return;
 				vm.move('right');
 			});
-
 			new Hammer(document.querySelector('.btn.down')).on('tap', function(){
 				if(vm.status !== 'playing') return;
 				vm.move('down');
 			});
-
 			new Hammer(document.querySelector('.btn.roate')).on('tap', function(){
 				if(vm.status !== 'playing') return;
 				vm.roate();
 			});
 
+			// 键盘控制
 			document.addEventListener('keydown', function(e){
 				switch(e.key){
 					case 'ArrowLeft':
