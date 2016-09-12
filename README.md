@@ -40,6 +40,35 @@ https://ideatry.github.io/vue-tetris/build/index.html
 变形：上划
 加速：下划
 
+## 游戏逻辑
+
+## 模块划分
+
+UI元素
+
+1. 页面
+2. 主窗口
+3. 预览窗口
+4. 控制按钮
+5. 分数和历史记录
+
+功能模块
+
+1. 页面控制器（主控制器）
+2. 预览控制器
+3. 形状类
+4. 旋转器
+5. 计时器
+6. 移动和变形控制器
+
+组件
+
+1. chessboard.vue
+2. page.vue
+3. handles.vue
+4. score.vue
+5. preview.vue
+
 ## 问题反馈
 
 mailhap@qq.com
