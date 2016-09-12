@@ -50,6 +50,7 @@
 			};
 		},
 		methods: {
+			// 重置
 			reset: function(){
 				if(!this.col || !this.row) return;
 				//
@@ -58,19 +59,22 @@
 				//
 				this.c.reset();
 			},
+			// 旋转图形
 			roate: function(){
 				this.c.roate();
 			},
+			// 移动图形
 			move: function(d){
 				this.c.move(d);
 			},
+			// 重力
 			drop: function(){
 				this.c.move('down');
 			},
 
 		},
 
-		// 
+		// 把主界面控制器的命令传递给棋盘的控制器
 		watch: {
 			current: function(shape){
 				if(shape){
@@ -83,12 +87,18 @@
 		ready: function(){
 			var c = this.c, vm = this;
 
+			c.start = vm.start;
+
 			c.on('reset', function(rows){
 				vm.rows = rows;
 			});
 
 			c.on('stop', function(shape){
 				vm.$emit('stop', shape);
+			});
+
+			c.on('score', function(times){
+				vm.$emit('score', times);
 			});
 
 			this.reset();

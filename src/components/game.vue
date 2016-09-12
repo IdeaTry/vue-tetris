@@ -1,6 +1,6 @@
 <style lang="stylus">
 	.game{
-		opacity: .1;
+		//opacity: .1;
 		max-width: 400px;
 		margin-left: auto;
 		margin-right: auto;
@@ -39,7 +39,7 @@
 				:col="3" :row="3" :current="preview">
 			</chessboard>
 
-			<score></score>
+			<score :score="score"></score>
 
 			<handles class="handles" v-ref:handles 
 				:status="status">
@@ -66,12 +66,12 @@
 				current: null,
 				preview: null,
 				score: 0,
-				timer: null
+				timer: null,
+				dropTime: 500
 			};
 		},
 		components: {
 			chessboard: require('./chessboard.vue'),
-			//preview: require('./preview.vue'),
 			score: require('./score.vue'),
 			handles: require('./handles.vue'),
 		},
@@ -82,7 +82,7 @@
 				var doc = document.documentElement;
 
 				this.width = Math.min(doc.clientWidth, 400) - 20 - 100;
-				this.height = doc.clientHeight - 20;
+				this.height = doc.clientHeight;
 
 				this.col = Math.floor(this.width/(this.cellWidth + 2));
 				this.row = Math.floor(this.height/(this.cellWidth + 1));
@@ -100,7 +100,7 @@
 					height: this.height + 'px',
 				});
 				css('.main', {
-					height: this.height + 'px',
+					height: (this.height - 20) + 'px',
 					width: this.width + 'px',
 				});
 			},
@@ -138,31 +138,36 @@
 				if(vm.status === 'playing'){
 					chessboard.drop();
 				};
-			}, 100);
+			}, vm.dropTime);
 
 			// shape停止后添加新的
 			chessboard.$on('stop', function(shape){
 				vm.add();
+				vm.timer.time = vm.dropTime;
 			});
 			// 计分
 			chessboard.$on('score', function(times){
-				this.score += this.col * times;
+				vm.score += vm.col * times;
 			});
 
 			// 手柄
 			handles.$on('move', function(d){
 				chessboard.move(d);
+				// 没按一次向下按钮，就加速20%
+				if(d == 'down'){
+					vm.timer.time -= vm.timer.time*0.2;
+				};
 			});
 			handles.$on('roate', function(){
 				chessboard.roate();
 			});
 			handles.$on('suspend', function(){
-				if(this.status === 'playing'){
-					this.status = 'suspend';
+				if(vm.status === 'playing'){
+					vm.status = 'suspend';
 				};
 			});
 			handles.$on('resume', function(){
-				this.status = 'playing';
+				vm.status = 'playing';
 			});
 
 			// 立即开始

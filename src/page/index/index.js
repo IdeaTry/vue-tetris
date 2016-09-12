@@ -3,10 +3,10 @@ import Vue from 'vue'
 var vm = new Vue({
 	el: 'body',
 	template: `
-		<stage></stage>
+		<game></game>
 	`,
 	replace: false,
 	components: {
-		stage: require('./stage.vue')
+		game: require('../../components/game.vue')
 	}
 })

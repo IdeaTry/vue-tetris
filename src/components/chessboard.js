@@ -56,7 +56,7 @@ Chessboard.prototype = EventEmitter({
 		this.rows = rows;
 	},
 
-	//
+	// 创建一块新的形状，并且刷新显示
 	add: function(shape){
 		this.track = null;
 		this.current = shape;
