@@ -44,7 +44,7 @@ https://ideatry.github.io/vue-tetris/build/index.html
 ```
 
 
-## 功能模块
+## 模块划分
 
 1. tetris.vue      主界面
 2. chessboard.vue  棋盘界面
@@ -52,6 +52,76 @@ https://ideatry.github.io/vue-tetris/build/index.html
 4. score.vue       分数界面
 5. shape.js        积木
 6. shape.rotator   旋转工具
+
+![ui-components](./doc/images/ui-compnents.png)
+
+## 代码规范
+
+a. 界面由Vue组件组合而成
+```html
+<template>
+    <!-- 容器 -->
+    <div class="game">
+        
+        <!-- 主界面 -->
+        <chessboard class="main" v-ref:chessboard
+            :col="col" :row="row" :current="current" :start="startOffset">
+        </chessboard>
+        
+        <!-- 侧面 -->
+        <div class="side">
+            
+            <!-- 预览小窗口 -->
+            <chessboard v-ref:preview 
+                :col="3" :row="3" :current="preview">
+            </chessboard>
+            
+            <!-- 成绩 -->
+            <score :score="score"></score>
+            
+            <!-- 暂停 -->
+            <div class="play" v-show="status === 'playing'">
+                <div class="suspend">暂停</div>
+            </div>
+
+        </div>
+        
+        <!-- 控制器 -->
+        <div class="handles">
+            <handles v-ref:handles 
+                :status="status">
+            </handles>
+        </div>
+        
+        <!-- 全屏覆盖的消息 -->
+        <div class="msg" v-show="msg">
+            <span>{{msg}}</span>
+        </div>
+    </div>
+</template>
+```
+
+b. 父元素可以直接操作子元素，子元素不可以操作父元素，只能通过触发事件来向父元素发送消息
+```js
+    var vm = this,
+        chessboard = vm.$refs.chessboard;
+
+    // 重力作用
+    vm.timer = interval(function(){
+        if(vm.status === 'playing'){
+            chessboard.drop();
+        };
+    }, 1000/vm.speed);
+
+    // 计分
+    chessboard.$on('score', function(times){
+        vm.score += vm.col * times;
+    });
+    // gameover
+    chessboard.$on('gameover', function(times){
+        vm.status = 'gameover';
+    });
+```
 
 ## 问题反馈
 
