@@ -53,7 +53,7 @@ https://ideatry.github.io/vue-tetris/build/index.html
 5. shape.js        积木
 6. shape.rotator   旋转工具
 
-![ui-components](./doc/images/ui-compnents.png)
+![ui-components](./doc/images/ui-components.png)
 
 ## 代码规范
 
