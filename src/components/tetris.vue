@@ -62,32 +62,40 @@
 </style>
 
 <template>
+	<!-- 容器 -->
 	<div class="game">
-
+		
+		<!-- 主界面 -->
 		<chessboard class="main" v-ref:chessboard
 			:col="col" :row="row" :current="current" :start="startOffset">
 		</chessboard>
-
+		
+		<!-- 侧面 -->
 		<div class="side">
-
+			
+			<!-- 预览小窗口 -->
 			<chessboard v-ref:preview 
 				:col="3" :row="3" :current="preview">
 			</chessboard>
-
+			
+			<!-- 成绩 -->
 			<score :score="score"></score>
-
+			
+			<!-- 暂停 -->
 			<div class="play" v-show="status === 'playing'">
 				<div class="suspend">暂停</div>
 			</div>
 
 		</div>
-
+		
+		<!-- 控制器 -->
 		<div class="handles">
 			<handles v-ref:handles 
 				:status="status">
 			</handles>
 		</div>
-
+		
+		<!-- 全屏覆盖的消息 -->
 		<div class="msg" v-show="msg">
 			<span>{{msg}}</span>
 		</div>
