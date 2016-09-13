@@ -67,7 +67,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		template: '\n\t\t<tetris></tetris>\n\t',
 		replace: false,
 		components: {
-			tetris: __webpack_require__(46)
+			tetris: __webpack_require__(3)
 		}
 	});
 
@@ -10338,9 +10338,75 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */,
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(4)
+	__vue_script__ = __webpack_require__(8)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/components/tetris.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(45)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-68c72f1c/tetris.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(5);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".game {\n  max-width: 400px;\n  margin-left: auto;\n  margin-right: auto;\n  background: #e3e3e3;\n  overflow: hidden;\n  position: relative;\n}\n.game .main {\n  float: left;\n}\n.game .side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.game .side .play {\n  width: 65px;\n  padding: 5px 0;\n  border: 1px solid #999;\n  margin: 20px auto 0 auto;\n  border-radius: 3px;\n  text-align: center;\n  color: #999;\n  background: #fff;\n}\n.game .handles {\n  height: 150px;\n  width: 100%;\n  position: absolute;\n  bottom: 0;\n  left: 0;\n}\n.game .msg {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  background: #ccc;\n  opacity: 0.8;\n  z-index: 10;\n}\n.game .msg span {\n  display: inline-block;\n  padding: 20px;\n  width: 50%;\n  margin: 200px auto;\n  font-size: 20px;\n  background: #fff;\n  border-radius: 5px;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
 /* 6 */
 /***/ function(module, exports) {
 
@@ -10619,7 +10685,201 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 8 */,
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _shape = __webpack_require__(9);
+
+	var _shape2 = _interopRequireDefault(_shape);
+
+	var _dom = __webpack_require__(11);
+
+	var _interval = __webpack_require__(12);
+
+	var _interval2 = _interopRequireDefault(_interval);
+
+	var _hammer = __webpack_require__(13);
+
+	var _hammer2 = _interopRequireDefault(_hammer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initSpeed = 2;
+
+	exports.default = {
+		data: function data() {
+			return {
+				cellWidth: 20,
+				shapeWidth: 3,
+				width: 0,
+				height: 0,
+				startOffset: [0, 0],
+				current: null,
+				preview: null,
+				score: 0,
+				timer: null,
+				speed: initSpeed,
+				status: 'ready',
+				msg: 'TOUCH START'
+			};
+		},
+		components: {
+			chessboard: __webpack_require__(14),
+			score: __webpack_require__(35),
+			handles: __webpack_require__(40)
+		},
+		methods: {
+			size: function size() {
+				var doc = document.documentElement;
+
+				this.width = Math.min(doc.clientWidth, 400) - 20;
+				this.height = doc.clientHeight - 20;
+
+				this.width -= 100;
+				this.height -= 150;
+
+				this.col = Math.floor(this.width / (this.cellWidth + 2));
+				this.row = Math.floor(this.height / (this.cellWidth + 1));
+
+				this.startOffset = [Math.floor(this.col / 2) - Math.floor(this.shapeWidth / 2), -this.shapeWidth];
+			},
+
+			render: function render() {
+				(0, _dom.css)('.game', {
+					height: document.documentElement.clientHeight + 'px'
+				});
+				(0, _dom.css)('.main', {
+					height: this.height + 'px',
+					width: this.width + 'px'
+				});
+				(0, _dom.css)('.side', {
+					height: this.height + 'px'
+				});
+			},
+
+			add: function add() {
+				this.status = 'playing';
+				this.current = this.preview || _shape2.default.random();
+				this.$refs.preview.reset();
+				this.preview = _shape2.default.random();
+			},
+
+			restart: function restart() {
+				this.$refs.chessboard.reset();
+				this.score = 0;
+				this.status = 'playing';
+				this.add();
+			},
+
+			toggleMsg: function toggleMsg() {
+				var vm = this;
+
+				switch (this.status) {
+					case 'ready':
+						vm.status = 'playing';
+						vm.add();
+						break;
+					case 'gameover':
+						vm.restart();
+						break;
+					case 'suspend':
+						vm.status = 'playing';
+						break;
+				};
+
+				return this;
+			}
+
+		},
+
+		watch: {
+			status: function status(_status) {
+				this.msg = {
+					suspend: 'SUSPEND',
+					gameover: 'GAME OVER'
+				}[_status] || '';
+			},
+			score: function score(_score) {
+				if (_score < 100) {
+					return;
+				};
+
+				this.speed = initSpeed + Math.floor(_score / 100);
+
+				this.timer.time = 1000 / this.speed;
+			}
+		},
+
+		created: function created() {
+			this.size();
+		},
+
+		ready: function ready() {
+			var vm = this,
+			    handles = vm.$refs.handles,
+			    chessboard = vm.$refs.chessboard;
+
+			vm.render();
+
+			vm.timer = (0, _interval2.default)(function () {
+				if (vm.status === 'playing') {
+					chessboard.drop();
+				};
+			}, 1000 / vm.speed);
+
+			chessboard.$on('stop', function (shape) {
+				vm.add();
+				vm.timer.time = 1000 / vm.speed;
+			});
+
+			chessboard.$on('score', function (times) {
+				vm.score += vm.col * times;
+			});
+
+			chessboard.$on('gameover', function (times) {
+				vm.status = 'gameover';
+			});
+
+			handles.$on('move', function (d) {
+				chessboard.move(d);
+
+				if (d == 'down') {
+					vm.timer.time -= vm.timer.time * 0.3;
+				};
+			});
+			handles.$on('roate', function () {
+				chessboard.roate();
+			});
+			handles.$on('suspend', function () {
+				if (vm.status === 'playing') {
+					vm.status = 'suspend';
+				};
+			});
+			handles.$on('resume', function () {
+				vm.status = 'playing';
+			});
+
+			new _hammer2.default((0, _dom.query)('.play')).on('tap', function (e) {
+				if (vm.status === 'suspend') {
+					vm.status = 'playing';
+				} else if (vm.status === 'playing') {
+					vm.status = 'suspend';
+				};
+			});
+
+			new _hammer2.default((0, _dom.query)('.msg')).on('tap', function (e) {
+				vm.toggleMsg();
+			});
+		}
+	};
+
+/***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -11102,1048 +11362,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(14)
-	__vue_script__ = __webpack_require__(16)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/components/chessboard.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(33)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-b899e942/chessboard.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(15);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-b899e942&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./chessboard.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-b899e942&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./chessboard.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".chessboard[_v-b899e942] {\n  width: auto;\n  text-align: center;\n  padding: 10px;\n}\n.chessboard table[_v-b899e942] {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.chessboard table td[_v-b899e942] {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\n.chessboard table td.active[_v-b899e942] {\n  background: #808080;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _chessboard = __webpack_require__(17);
-
-	var _chessboard2 = _interopRequireDefault(_chessboard);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-		props: ['col', 'row', 'current', 'start'],
-		data: function data() {
-			return {
-				rows: [],
-				c: new _chessboard2.default()
-			};
-		},
-		methods: {
-			reset: function reset() {
-				if (!this.col || !this.row) return;
-
-				this.c.col = this.col;
-				this.c.row = this.row;
-
-				this.c.reset();
-			},
-
-			roate: function roate() {
-				this.c.roate();
-			},
-
-			move: function move(d) {
-				this.c.move(d);
-			},
-
-			drop: function drop() {
-				this.c.move('down');
-			}
-
-		},
-
-		watch: {
-			current: function current(shape) {
-				if (shape) {
-					this.c.add(shape);
-				};
-			}
-		},
-
-		ready: function ready() {
-			var c = this.c,
-			    vm = this;
-
-			c.start = vm.start;
-
-			c.on('reset', function (rows) {
-				vm.rows = rows;
-			});
-
-			c.on('stop', function (shape) {
-				vm.$emit('stop', shape);
-			});
-
-			c.on('score', function (times) {
-				vm.$emit('score', times);
-			});
-
-			c.on('gameover', function () {
-				vm.$emit('gameover');
-			});
-
-			this.reset();
-		}
-	};
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _shape = __webpack_require__(9);
-
-	var _shape2 = _interopRequireDefault(_shape);
-
-	var _eventEmitter = __webpack_require__(18);
-
-	var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// 遍历所有格子
-	function eachCell(rows, fn) {
-		rows.forEach(function (cells) {
-			cells.forEach(function (cell) {
-				fn(cell);
-			});
-		});
-	}
-
-	// 查找指定格子
-	function findCell(rows, point) {
-		var col = point[0],
-		    row = point[1];
-		return (rows[row] || [])[col] || null;
-	}
-
-	// 查找一组格子
-	function findCells(rows, indexs, fn) {
-		var cells = [],
-		    cell;
-
-		indexs.forEach(function (point) {
-			cell = findCell(rows, point);
-			if (cell) {
-				fn && fn(cell);
-				cells.push(cell);
-			};
-		});
-
-		return cells;
-	}
-
-	var Chessboard = function Chessboard() {};
-
-	Chessboard.prototype = (0, _eventEmitter2.default)({
-
-		// 绘制表格
-		reset: function reset() {
-			var rows = [],
-			    row,
-			    shapeWidth = 3;
-
-			if (!this.row || !this.col) return this;
-
-			// 绘制空表格
-			for (var i = 0; i < this.row; i++) {
-				row = [];
-				for (var j = 0; j < this.col; j++) {
-					row.push({ row: i, col: j, val: 0, cls: '' });
-				};
-				rows.push(row);
-			};
-
-			this.emit('reset', rows);
-
-			this.rows = rows;
-		},
-
-		// 创建一块新的形状，并且刷新显示
-		add: function add(shape) {
-			this.track = null;
-			this.current = shape;
-			if (this.start) {
-				this.current.offset(this.start);
-			};
-			this.refresh();
-		},
-
-		// 刷新显示：清空轨迹，并在新的位置显示
-		refresh: function refresh() {
-			this.track && findCells(this.rows, this.track, function (cell) {
-				cell.val = 0;
-			});
-
-			findCells(this.rows, this.current, function (cell) {
-				cell.val = 1;
-			});
-
-			this.emit('refresh', this.rows);
-		},
-
-		// 移动：左、右、下
-		move: function move(type) {
-			if (!this.current) return this;
-			// test move
-			if (!this.testMove(this.current.clone().move(type).specific(this.current))) {
-				if (type === 'down') {
-					// test gameover
-					if (this.isGameOver()) {
-						this.emit('gameover');
-						return this;
-					};
-					// 检查是否有可以消除的行
-					this.testDissolve();
-					//
-					this.emit('stop', this.current.toJson());
-				};
-			} else {
-				//
-				this.track = this.current.toJson();
-				// move
-				this.current.move(type);
-				this.refresh();
-			};
-
-			return this;
-		},
-
-		// 旋转（向左）
-		roate: function roate() {
-			if (!this.current) return this;
-			// test roate
-			if (!this.testMove(this.current.clone().roate().specific(this.current))) {
-				return this;
-			};
-			//
-			this.track = this.current.toJson();
-			//
-			this.current.roate();
-			this.refresh();
-			return this;
-		},
-
-		// 检查是否gameover
-		isGameOver: function isGameOver() {
-			var failed = false;
-			this.current && this.current.forEach(function (n) {
-				failed = failed || n[1] < 0;
-			});
-			return failed;
-		},
-
-		// 检查移动或旋转是否允许
-		testMove: function testMove(shape) {
-			var reject = false,
-			    cell,
-			    rows = this.rows;
-
-			// 检查每一个请求新占的格子
-			shape.forEach(function (n) {
-				if (reject) return;
-				// 检查是否超出边界或者被物体阻挡
-				if (n[0] < 0 || n[0] >= this.col || n[1] >= this.row) {
-					reject = true;
-				} else {
-					cell = findCell(rows, n);
-					if (cell && cell.val === 1) {
-						reject = true;
-					};
-				};
-			}.bind(this));
-
-			// 如果未被阻挡则测试通过
-			return !reject;
-		},
-
-		// 消除
-		dissolve: function dissolve(rowIndex) {
-			var rows = this.rows,
-			    prevRow;
-
-			rows[0].forEach(function (cell) {
-				cell.val = 0;
-			});
-
-			while (rowIndex > 0) {
-				prevRow = rows[rowIndex - 1];
-				rows[rowIndex].forEach(function (cell, colIndex) {
-					cell.val = prevRow[colIndex].val;
-				});
-				rowIndex--;
-			};
-
-			this.emit('dissolve', rowIndex);
-			this.emit('refresh');
-
-			return this;
-		},
-
-		// 尝试消除
-		testDissolve: function testDissolve(scoreTimes) {
-			var dissolveRowIndex = null;
-
-			scoreTimes = scoreTimes || 1;
-
-			this.rows.forEach(function (row, y) {
-				var hasEmpty = false;
-
-				if (dissolveRowIndex !== null) return;
-
-				row.forEach(function (cell) {
-					hasEmpty = hasEmpty || cell.val === 0;
-				});
-
-				if (!hasEmpty) {
-					dissolveRowIndex = y;
-				};
-			});
-
-			if (dissolveRowIndex !== null) {
-				this.dissolve(dissolveRowIndex);
-				this.emit('score', scoreTimes);
-				this.testDissolve(scoreTimes + 1);
-			};
-
-			return this;
-		}
-
-	});
-
-	exports.default = Chessboard;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var d        = __webpack_require__(19)
-	  , callable = __webpack_require__(32)
-
-	  , apply = Function.prototype.apply, call = Function.prototype.call
-	  , create = Object.create, defineProperty = Object.defineProperty
-	  , defineProperties = Object.defineProperties
-	  , hasOwnProperty = Object.prototype.hasOwnProperty
-	  , descriptor = { configurable: true, enumerable: false, writable: true }
-
-	  , on, once, off, emit, methods, descriptors, base;
-
-	on = function (type, listener) {
-		var data;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) {
-			data = descriptor.value = create(null);
-			defineProperty(this, '__ee__', descriptor);
-			descriptor.value = null;
-		} else {
-			data = this.__ee__;
-		}
-		if (!data[type]) data[type] = listener;
-		else if (typeof data[type] === 'object') data[type].push(listener);
-		else data[type] = [data[type], listener];
-
-		return this;
-	};
-
-	once = function (type, listener) {
-		var once, self;
-
-		callable(listener);
-		self = this;
-		on.call(this, type, once = function () {
-			off.call(self, type, once);
-			apply.call(listener, this, arguments);
-		});
-
-		once.__eeOnceListener__ = listener;
-		return this;
-	};
-
-	off = function (type, listener) {
-		var data, listeners, candidate, i;
-
-		callable(listener);
-
-		if (!hasOwnProperty.call(this, '__ee__')) return this;
-		data = this.__ee__;
-		if (!data[type]) return this;
-		listeners = data[type];
-
-		if (typeof listeners === 'object') {
-			for (i = 0; (candidate = listeners[i]); ++i) {
-				if ((candidate === listener) ||
-						(candidate.__eeOnceListener__ === listener)) {
-					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
-					else listeners.splice(i, 1);
-				}
-			}
-		} else {
-			if ((listeners === listener) ||
-					(listeners.__eeOnceListener__ === listener)) {
-				delete data[type];
-			}
-		}
-
-		return this;
-	};
-
-	emit = function (type) {
-		var i, l, listener, listeners, args;
-
-		if (!hasOwnProperty.call(this, '__ee__')) return;
-		listeners = this.__ee__[type];
-		if (!listeners) return;
-
-		if (typeof listeners === 'object') {
-			l = arguments.length;
-			args = new Array(l - 1);
-			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
-
-			listeners = listeners.slice();
-			for (i = 0; (listener = listeners[i]); ++i) {
-				apply.call(listener, this, args);
-			}
-		} else {
-			switch (arguments.length) {
-			case 1:
-				call.call(listeners, this);
-				break;
-			case 2:
-				call.call(listeners, this, arguments[1]);
-				break;
-			case 3:
-				call.call(listeners, this, arguments[1], arguments[2]);
-				break;
-			default:
-				l = arguments.length;
-				args = new Array(l - 1);
-				for (i = 1; i < l; ++i) {
-					args[i - 1] = arguments[i];
-				}
-				apply.call(listeners, this, args);
-			}
-		}
-	};
-
-	methods = {
-		on: on,
-		once: once,
-		off: off,
-		emit: emit
-	};
-
-	descriptors = {
-		on: d(on),
-		once: d(once),
-		off: d(off),
-		emit: d(emit)
-	};
-
-	base = defineProperties({}, descriptors);
-
-	module.exports = exports = function (o) {
-		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
-	};
-	exports.methods = methods;
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var assign        = __webpack_require__(20)
-	  , normalizeOpts = __webpack_require__(27)
-	  , isCallable    = __webpack_require__(28)
-	  , contains      = __webpack_require__(29)
-
-	  , d;
-
-	d = module.exports = function (dscr, value/*, options*/) {
-		var c, e, w, options, desc;
-		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
-			options = value;
-			value = dscr;
-			dscr = null;
-		} else {
-			options = arguments[2];
-		}
-		if (dscr == null) {
-			c = w = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-			w = contains.call(dscr, 'w');
-		}
-
-		desc = { value: value, configurable: c, enumerable: e, writable: w };
-		return !options ? desc : assign(normalizeOpts(options), desc);
-	};
-
-	d.gs = function (dscr, get, set/*, options*/) {
-		var c, e, options, desc;
-		if (typeof dscr !== 'string') {
-			options = set;
-			set = get;
-			get = dscr;
-			dscr = null;
-		} else {
-			options = arguments[3];
-		}
-		if (get == null) {
-			get = undefined;
-		} else if (!isCallable(get)) {
-			options = get;
-			get = set = undefined;
-		} else if (set == null) {
-			set = undefined;
-		} else if (!isCallable(set)) {
-			options = set;
-			set = undefined;
-		}
-		if (dscr == null) {
-			c = true;
-			e = false;
-		} else {
-			c = contains.call(dscr, 'c');
-			e = contains.call(dscr, 'e');
-		}
-
-		desc = { get: get, set: set, configurable: c, enumerable: e };
-		return !options ? desc : assign(normalizeOpts(options), desc);
-	};
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(21)()
-		? Object.assign
-		: __webpack_require__(22);
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function () {
-		var assign = Object.assign, obj;
-		if (typeof assign !== 'function') return false;
-		obj = { foo: 'raz' };
-		assign(obj, { bar: 'dwa' }, { trzy: 'trzy' });
-		return (obj.foo + obj.bar + obj.trzy) === 'razdwatrzy';
-	};
-
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var keys  = __webpack_require__(23)
-	  , value = __webpack_require__(26)
-
-	  , max = Math.max;
-
-	module.exports = function (dest, src/*, …srcn*/) {
-		var error, i, l = max(arguments.length, 2), assign;
-		dest = Object(value(dest));
-		assign = function (key) {
-			try { dest[key] = src[key]; } catch (e) {
-				if (!error) error = e;
-			}
-		};
-		for (i = 1; i < l; ++i) {
-			src = arguments[i];
-			keys(src).forEach(assign);
-		}
-		if (error !== undefined) throw error;
-		return dest;
-	};
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(24)()
-		? Object.keys
-		: __webpack_require__(25);
-
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function () {
-		try {
-			Object.keys('primitive');
-			return true;
-		} catch (e) { return false; }
-	};
-
-
-/***/ },
-/* 25 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var keys = Object.keys;
-
-	module.exports = function (object) {
-		return keys(object == null ? object : Object(object));
-	};
-
-
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function (value) {
-		if (value == null) throw new TypeError("Cannot use null or undefined");
-		return value;
-	};
-
-
-/***/ },
-/* 27 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var forEach = Array.prototype.forEach, create = Object.create;
-
-	var process = function (src, obj) {
-		var key;
-		for (key in src) obj[key] = src[key];
-	};
-
-	module.exports = function (options/*, …options*/) {
-		var result = create(null);
-		forEach.call(arguments, function (options) {
-			if (options == null) return;
-			process(Object(options), result);
-		});
-		return result;
-	};
-
-
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
-
-	// Deprecated
-
-	'use strict';
-
-	module.exports = function (obj) { return typeof obj === 'function'; };
-
-
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(30)()
-		? String.prototype.contains
-		: __webpack_require__(31);
-
-
-/***/ },
-/* 30 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var str = 'razdwatrzy';
-
-	module.exports = function () {
-		if (typeof str.contains !== 'function') return false;
-		return ((str.contains('dwa') === true) && (str.contains('foo') === false));
-	};
-
-
-/***/ },
-/* 31 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var indexOf = String.prototype.indexOf;
-
-	module.exports = function (searchString/*, position*/) {
-		return indexOf.call(this, searchString, arguments[1]) > -1;
-	};
-
-
-/***/ },
-/* 32 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function (fn) {
-		if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
-		return fn;
-	};
-
-
-/***/ },
-/* 33 */
-/***/ function(module, exports) {
-
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"chessboard\" _v-b899e942=\"\">\n\t<table _v-b899e942=\"\">\n\t\t<tbody _v-b899e942=\"\"><tr v-for=\"row in rows\" _v-b899e942=\"\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.val == 1 ? 'active' : ''\" _v-b899e942=\"\"></td>\n\t\t</tr>\n\t</tbody></table>\n</div>\n";
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(35)
-	__vue_script__ = __webpack_require__(37)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/components/score.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(38)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-993748ae/score.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(36);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-993748ae&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./score.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-993748ae&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./score.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "h1[_v-993748ae] {\n  margin: 20px auto 0 auto;\n  font-size: 14px;\n  padding: 6px 0;\n  text-align: center;\n  border-radius: 3px;\n  width: 65px;\n  color: #f60;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = {
-		props: ['score']
-	};
-
-/***/ },
-/* 38 */
-/***/ function(module, exports) {
-
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n<h1 _v-993748ae=\"\">{{score}}</h1>\n";
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_script__, __vue_template__
-	__webpack_require__(40)
-	__vue_script__ = __webpack_require__(42)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/components/handles.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(44)
-	module.exports = __vue_script__ || {}
-	if (module.exports.__esModule) module.exports = module.exports.default
-	if (__vue_template__) {
-	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
-	}
-	if (false) {(function () {  module.hot.accept()
-	  var hotAPI = require("vue-hot-reload-api")
-	  hotAPI.install(require("vue"), false)
-	  if (!hotAPI.compatible) return
-	  var id = "_v-aac6e7bc/handles.vue"
-	  if (!module.hot.data) {
-	    hotAPI.createRecord(id, module.exports)
-	  } else {
-	    hotAPI.update(id, module.exports, __vue_template__)
-	  }
-	})()}
-
-/***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(41);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-aac6e7bc&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./handles.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-aac6e7bc&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./handles.vue");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(6)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".control[_v-aac6e7bc] {\n  padding: 5px 0 0 0;\n  margin: 0 1em;\n}\n.control .control-content[_v-aac6e7bc] {\n  width: 200px;\n  height: 120px;\n  background: #fff;\n  margin: 0 auto;\n}\n.control table[_v-aac6e7bc] {\n  border-collapse: collapse;\n  width: 100%;\n}\n.control table td[_v-aac6e7bc] {\n  border: 1px solid #fff;\n  vertical-align: middle;\n  width: 33.33%;\n  text-align: center;\n  color: #fff;\n}\n.control table td.roate[_v-aac6e7bc],\n.control table td.down[_v-aac6e7bc] {\n  height: 50px;\n}\n.control table td.touch-style[_v-aac6e7bc] {\n  background: #fff;\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _hammer = __webpack_require__(43);
-
-	var _hammer2 = _interopRequireDefault(_hammer);
-
-	var _dom = __webpack_require__(11);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function touchStyle(tag) {
-		(0, _dom.addClass)(tag, 'touch-style');
-		setTimeout(function () {
-			(0, _dom.removeClass)(this, 'touch-style');
-		}.bind(tag), 100);
-	}
-
-	exports.default = {
-		props: ['status'],
-		methods: {
-			move: function move(d) {
-				this.$emit('move', d);
-			},
-			roate: function roate() {
-				this.$emit('roate');
-			},
-			suspend: function suspend() {
-				this.$emit('suspend');
-			},
-			resume: function resume() {
-				this.$emit('resume');
-			}
-		},
-		ready: function ready() {
-			var vm = this;
-
-			new _hammer2.default(document.querySelector('body')).on('swipeleft swiperight swipedown swipeup', function (e) {
-				if (vm.status !== 'playing') return;
-
-				if (e.type === 'swipeup') {
-					vm.roate();
-				} else {
-					vm.move(e.type.replace('swipe', ''));
-				};
-			}).get('swipe').set({ direction: _hammer2.default.DIRECTION_ALL });
-
-			new _hammer2.default(document.querySelector('.btn.left')).on('tap', function () {
-				if (vm.status !== 'playing') return;
-				vm.move('left');
-			});
-			new _hammer2.default(document.querySelector('.btn.right')).on('tap', function () {
-				if (vm.status !== 'playing') return;
-				vm.move('right');
-			});
-			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
-				if (vm.status !== 'playing') return;
-				vm.move('down');
-			});
-			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
-				if (vm.status !== 'playing') return;
-				vm.roate();
-			});
-
-			(0, _dom.on)('td.btn', 'touchstart', function (e) {
-				touchStyle(e.target);
-			});
-
-			document.addEventListener('keydown', function (e) {
-				switch (e.key) {
-					case 'ArrowLeft':
-						return vm.status === 'playing' && vm.move('left');
-					case 'ArrowRight':
-						return vm.status === 'playing' && vm.move('right');
-					case 'ArrowDown':
-						return vm.status === 'playing' && vm.move('down');
-					case 'ArrowUp':
-						return vm.status === 'playing' && vm.roate();
-					case ' ':
-						if (vm.status === 'suspend') {
-							vm.resume();
-						} else if (vm.status === 'playing') {
-							vm.suspend();
-						};
-						return;
-				}
-			});
-
-			document.addEventListener('touchstart', function (e) {
-				e.returnValue = false;
-			});
-		}
-	};
-
-/***/ },
-/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
@@ -14781,24 +13999,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(window, document, 'Hammer');
 
 /***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"control\" _v-aac6e7bc=\"\">\n\t<table _v-aac6e7bc=\"\">\n\t\t<tbody _v-aac6e7bc=\"\"><tr _v-aac6e7bc=\"\">\n\t\t\t<td class=\"btn left\" rowspan=\"2\" _v-aac6e7bc=\"\">←</td>\n\t\t\t<td class=\"btn roate\" _v-aac6e7bc=\"\"></td>\n\t\t\t<td class=\"btn right\" rowspan=\"2\" _v-aac6e7bc=\"\">→</td>\n\t\t</tr>\n\t\t<tr _v-aac6e7bc=\"\">\n\t\t\t<td class=\"btn down\" _v-aac6e7bc=\"\">↓</td>\n\t\t</tr>\n\t</tbody></table>\n</div>\n";
-
-/***/ },
-/* 45 */,
-/* 46 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__webpack_require__(47)
-	__vue_script__ = __webpack_require__(49)
+	__webpack_require__(15)
+	__vue_script__ = __webpack_require__(17)
 	if (__vue_script__ &&
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] src/components/tetris.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(50)
+	  console.warn("[vue-loader] src/components/chessboard.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(34)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -14808,7 +14019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), false)
 	  if (!hotAPI.compatible) return
-	  var id = "_v-304366dc/tetris.vue"
+	  var id = "_v-0140373f/chessboard.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -14817,13 +14028,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	})()}
 
 /***/ },
-/* 47 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(48);
+	var content = __webpack_require__(16);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(7)(content, {});
@@ -14832,8 +14043,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./tetris.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-0140373f&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./chessboard.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-0140373f&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./chessboard.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -14843,7 +14054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 48 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(6)();
@@ -14851,13 +14062,95 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".game {\n  max-width: 400px;\n  margin-left: auto;\n  margin-right: auto;\n  background: #e3e3e3;\n  overflow: hidden;\n  position: relative;\n}\n.game .main {\n  float: left;\n}\n.game .side {\n  width: 100px;\n  height: 100%;\n  float: right;\n  position: relative;\n}\n.game .side .play {\n  width: 65px;\n  padding: 5px 0;\n  border: 1px solid #999;\n  margin: 20px auto 0 auto;\n  border-radius: 3px;\n  text-align: center;\n  color: #999;\n  background: #fff;\n}\n.game .handles {\n  height: 150px;\n  width: 100%;\n  position: absolute;\n  bottom: 0;\n  left: 0;\n}\n.game .msg {\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  background: #ccc;\n  opacity: 0.8;\n  z-index: 10;\n}\n.game .msg span {\n  display: inline-block;\n  padding: 20px;\n  width: 50%;\n  margin: 200px auto;\n  font-size: 20px;\n  background: #fff;\n  border-radius: 5px;\n}\n", ""]);
+	exports.push([module.id, ".chessboard[_v-0140373f] {\n  width: auto;\n  text-align: center;\n  padding: 10px;\n}\n.chessboard table[_v-0140373f] {\n  border-collapse: collapse;\n  background: #eee;\n  margin: 0 auto;\n}\n.chessboard table td[_v-0140373f] {\n  width: 20px;\n  height: 20px;\n  border: 1px solid #fff;\n  font-size: 9px;\n  text-align: center;\n  color: #ccc;\n  padding: 0 0 0 1px;\n}\n.chessboard table td.active[_v-0140373f] {\n  background: #808080;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 49 */
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _chessboard = __webpack_require__(18);
+
+	var _chessboard2 = _interopRequireDefault(_chessboard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+		props: ['col', 'row', 'current', 'start'],
+		data: function data() {
+			return {
+				rows: [],
+				c: new _chessboard2.default()
+			};
+		},
+		methods: {
+			reset: function reset() {
+				if (!this.col || !this.row) return;
+
+				this.c.col = this.col;
+				this.c.row = this.row;
+
+				this.c.reset();
+			},
+
+			roate: function roate() {
+				this.c.roate();
+			},
+
+			move: function move(d) {
+				this.c.move(d);
+			},
+
+			drop: function drop() {
+				this.c.move('down');
+			}
+
+		},
+
+		watch: {
+			current: function current(shape) {
+				if (shape) {
+					this.c.add(shape);
+				};
+			}
+		},
+
+		ready: function ready() {
+			var c = this.c,
+			    vm = this;
+
+			c.start = vm.start;
+
+			c.on('reset', function (rows) {
+				vm.rows = rows;
+			});
+
+			c.on('stop', function (shape) {
+				vm.$emit('stop', shape);
+			});
+
+			c.on('score', function (times) {
+				vm.$emit('score', times);
+			});
+
+			c.on('gameover', function () {
+				vm.$emit('gameover');
+			});
+
+			this.reset();
+		}
+	};
+
+/***/ },
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14870,192 +14163,894 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _shape2 = _interopRequireDefault(_shape);
 
-	var _dom = __webpack_require__(11);
+	var _eventEmitter = __webpack_require__(19);
 
-	var _interval = __webpack_require__(12);
-
-	var _interval2 = _interopRequireDefault(_interval);
-
-	var _hammer = __webpack_require__(43);
-
-	var _hammer2 = _interopRequireDefault(_hammer);
+	var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var initSpeed = 2;
+	// 遍历所有格子
+	function eachCell(rows, fn) {
+		rows.forEach(function (cells) {
+			cells.forEach(function (cell) {
+				fn(cell);
+			});
+		});
+	}
+
+	// 查找指定格子
+	function findCell(rows, point) {
+		var col = point[0],
+		    row = point[1];
+		return (rows[row] || [])[col] || null;
+	}
+
+	// 查找一组格子
+	function findCells(rows, indexs, fn) {
+		var cells = [],
+		    cell;
+
+		indexs.forEach(function (point) {
+			cell = findCell(rows, point);
+			if (cell) {
+				fn && fn(cell);
+				cells.push(cell);
+			};
+		});
+
+		return cells;
+	}
+
+	var Chessboard = function Chessboard() {};
+
+	Chessboard.prototype = (0, _eventEmitter2.default)({
+
+		// 绘制表格
+		reset: function reset() {
+			var rows = [],
+			    row,
+			    shapeWidth = 3;
+
+			if (!this.row || !this.col) return this;
+
+			// 绘制空表格
+			for (var i = 0; i < this.row; i++) {
+				row = [];
+				for (var j = 0; j < this.col; j++) {
+					row.push({ row: i, col: j, val: 0, cls: '' });
+				};
+				rows.push(row);
+			};
+
+			this.emit('reset', rows);
+
+			this.rows = rows;
+		},
+
+		// 创建一块新的形状，并且刷新显示
+		add: function add(shape) {
+			this.track = null;
+			this.current = shape;
+			if (this.start) {
+				this.current.offset(this.start);
+			};
+			this.refresh();
+		},
+
+		// 刷新显示：清空轨迹，并在新的位置显示
+		refresh: function refresh() {
+			this.track && findCells(this.rows, this.track, function (cell) {
+				cell.val = 0;
+			});
+
+			findCells(this.rows, this.current, function (cell) {
+				cell.val = 1;
+			});
+
+			this.emit('refresh', this.rows);
+		},
+
+		// 移动：左、右、下
+		move: function move(type) {
+			if (!this.current) return this;
+			// test move
+			if (!this.testMove(this.current.clone().move(type).specific(this.current))) {
+				if (type === 'down') {
+					// test gameover
+					if (this.isGameOver()) {
+						this.emit('gameover');
+						return this;
+					};
+					// 检查是否有可以消除的行
+					this.testDissolve();
+					//
+					this.emit('stop', this.current.toJson());
+				};
+			} else {
+				//
+				this.track = this.current.toJson();
+				// move
+				this.current.move(type);
+				this.refresh();
+			};
+
+			return this;
+		},
+
+		// 旋转（向左）
+		roate: function roate() {
+			if (!this.current) return this;
+			// test roate
+			if (!this.testMove(this.current.clone().roate().specific(this.current))) {
+				return this;
+			};
+			//
+			this.track = this.current.toJson();
+			//
+			this.current.roate();
+			this.refresh();
+			return this;
+		},
+
+		// 检查是否gameover
+		isGameOver: function isGameOver() {
+			var failed = false;
+			this.current && this.current.forEach(function (n) {
+				failed = failed || n[1] < 0;
+			});
+			return failed;
+		},
+
+		// 检查移动或旋转是否允许
+		testMove: function testMove(shape) {
+			var reject = false,
+			    cell,
+			    rows = this.rows;
+
+			// 检查每一个请求新占的格子
+			shape.forEach(function (n) {
+				if (reject) return;
+				// 检查是否超出边界或者被物体阻挡
+				if (n[0] < 0 || n[0] >= this.col || n[1] >= this.row) {
+					reject = true;
+				} else {
+					cell = findCell(rows, n);
+					if (cell && cell.val === 1) {
+						reject = true;
+					};
+				};
+			}.bind(this));
+
+			// 如果未被阻挡则测试通过
+			return !reject;
+		},
+
+		// 消除
+		dissolve: function dissolve(rowIndex) {
+			var rows = this.rows,
+			    prevRow;
+
+			rows[0].forEach(function (cell) {
+				cell.val = 0;
+			});
+
+			while (rowIndex > 0) {
+				prevRow = rows[rowIndex - 1];
+				rows[rowIndex].forEach(function (cell, colIndex) {
+					cell.val = prevRow[colIndex].val;
+				});
+				rowIndex--;
+			};
+
+			this.emit('dissolve', rowIndex);
+			this.emit('refresh');
+
+			return this;
+		},
+
+		// 尝试消除
+		testDissolve: function testDissolve(scoreTimes) {
+			var dissolveRowIndex = null;
+
+			scoreTimes = scoreTimes || 1;
+
+			this.rows.forEach(function (row, y) {
+				var hasEmpty = false;
+
+				if (dissolveRowIndex !== null) return;
+
+				row.forEach(function (cell) {
+					hasEmpty = hasEmpty || cell.val === 0;
+				});
+
+				if (!hasEmpty) {
+					dissolveRowIndex = y;
+				};
+			});
+
+			if (dissolveRowIndex !== null) {
+				this.dissolve(dissolveRowIndex);
+				this.emit('score', scoreTimes);
+				this.testDissolve(scoreTimes + 1);
+			};
+
+			return this;
+		}
+
+	});
+
+	exports.default = Chessboard;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var d        = __webpack_require__(20)
+	  , callable = __webpack_require__(33)
+
+	  , apply = Function.prototype.apply, call = Function.prototype.call
+	  , create = Object.create, defineProperty = Object.defineProperty
+	  , defineProperties = Object.defineProperties
+	  , hasOwnProperty = Object.prototype.hasOwnProperty
+	  , descriptor = { configurable: true, enumerable: false, writable: true }
+
+	  , on, once, off, emit, methods, descriptors, base;
+
+	on = function (type, listener) {
+		var data;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) {
+			data = descriptor.value = create(null);
+			defineProperty(this, '__ee__', descriptor);
+			descriptor.value = null;
+		} else {
+			data = this.__ee__;
+		}
+		if (!data[type]) data[type] = listener;
+		else if (typeof data[type] === 'object') data[type].push(listener);
+		else data[type] = [data[type], listener];
+
+		return this;
+	};
+
+	once = function (type, listener) {
+		var once, self;
+
+		callable(listener);
+		self = this;
+		on.call(this, type, once = function () {
+			off.call(self, type, once);
+			apply.call(listener, this, arguments);
+		});
+
+		once.__eeOnceListener__ = listener;
+		return this;
+	};
+
+	off = function (type, listener) {
+		var data, listeners, candidate, i;
+
+		callable(listener);
+
+		if (!hasOwnProperty.call(this, '__ee__')) return this;
+		data = this.__ee__;
+		if (!data[type]) return this;
+		listeners = data[type];
+
+		if (typeof listeners === 'object') {
+			for (i = 0; (candidate = listeners[i]); ++i) {
+				if ((candidate === listener) ||
+						(candidate.__eeOnceListener__ === listener)) {
+					if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
+					else listeners.splice(i, 1);
+				}
+			}
+		} else {
+			if ((listeners === listener) ||
+					(listeners.__eeOnceListener__ === listener)) {
+				delete data[type];
+			}
+		}
+
+		return this;
+	};
+
+	emit = function (type) {
+		var i, l, listener, listeners, args;
+
+		if (!hasOwnProperty.call(this, '__ee__')) return;
+		listeners = this.__ee__[type];
+		if (!listeners) return;
+
+		if (typeof listeners === 'object') {
+			l = arguments.length;
+			args = new Array(l - 1);
+			for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
+
+			listeners = listeners.slice();
+			for (i = 0; (listener = listeners[i]); ++i) {
+				apply.call(listener, this, args);
+			}
+		} else {
+			switch (arguments.length) {
+			case 1:
+				call.call(listeners, this);
+				break;
+			case 2:
+				call.call(listeners, this, arguments[1]);
+				break;
+			case 3:
+				call.call(listeners, this, arguments[1], arguments[2]);
+				break;
+			default:
+				l = arguments.length;
+				args = new Array(l - 1);
+				for (i = 1; i < l; ++i) {
+					args[i - 1] = arguments[i];
+				}
+				apply.call(listeners, this, args);
+			}
+		}
+	};
+
+	methods = {
+		on: on,
+		once: once,
+		off: off,
+		emit: emit
+	};
+
+	descriptors = {
+		on: d(on),
+		once: d(once),
+		off: d(off),
+		emit: d(emit)
+	};
+
+	base = defineProperties({}, descriptors);
+
+	module.exports = exports = function (o) {
+		return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+	};
+	exports.methods = methods;
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var assign        = __webpack_require__(21)
+	  , normalizeOpts = __webpack_require__(28)
+	  , isCallable    = __webpack_require__(29)
+	  , contains      = __webpack_require__(30)
+
+	  , d;
+
+	d = module.exports = function (dscr, value/*, options*/) {
+		var c, e, w, options, desc;
+		if ((arguments.length < 2) || (typeof dscr !== 'string')) {
+			options = value;
+			value = dscr;
+			dscr = null;
+		} else {
+			options = arguments[2];
+		}
+		if (dscr == null) {
+			c = w = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+			w = contains.call(dscr, 'w');
+		}
+
+		desc = { value: value, configurable: c, enumerable: e, writable: w };
+		return !options ? desc : assign(normalizeOpts(options), desc);
+	};
+
+	d.gs = function (dscr, get, set/*, options*/) {
+		var c, e, options, desc;
+		if (typeof dscr !== 'string') {
+			options = set;
+			set = get;
+			get = dscr;
+			dscr = null;
+		} else {
+			options = arguments[3];
+		}
+		if (get == null) {
+			get = undefined;
+		} else if (!isCallable(get)) {
+			options = get;
+			get = set = undefined;
+		} else if (set == null) {
+			set = undefined;
+		} else if (!isCallable(set)) {
+			options = set;
+			set = undefined;
+		}
+		if (dscr == null) {
+			c = true;
+			e = false;
+		} else {
+			c = contains.call(dscr, 'c');
+			e = contains.call(dscr, 'e');
+		}
+
+		desc = { get: get, set: set, configurable: c, enumerable: e };
+		return !options ? desc : assign(normalizeOpts(options), desc);
+	};
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(22)()
+		? Object.assign
+		: __webpack_require__(23);
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function () {
+		var assign = Object.assign, obj;
+		if (typeof assign !== 'function') return false;
+		obj = { foo: 'raz' };
+		assign(obj, { bar: 'dwa' }, { trzy: 'trzy' });
+		return (obj.foo + obj.bar + obj.trzy) === 'razdwatrzy';
+	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var keys  = __webpack_require__(24)
+	  , value = __webpack_require__(27)
+
+	  , max = Math.max;
+
+	module.exports = function (dest, src/*, …srcn*/) {
+		var error, i, l = max(arguments.length, 2), assign;
+		dest = Object(value(dest));
+		assign = function (key) {
+			try { dest[key] = src[key]; } catch (e) {
+				if (!error) error = e;
+			}
+		};
+		for (i = 1; i < l; ++i) {
+			src = arguments[i];
+			keys(src).forEach(assign);
+		}
+		if (error !== undefined) throw error;
+		return dest;
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(25)()
+		? Object.keys
+		: __webpack_require__(26);
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function () {
+		try {
+			Object.keys('primitive');
+			return true;
+		} catch (e) { return false; }
+	};
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var keys = Object.keys;
+
+	module.exports = function (object) {
+		return keys(object == null ? object : Object(object));
+	};
+
+
+/***/ },
+/* 27 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function (value) {
+		if (value == null) throw new TypeError("Cannot use null or undefined");
+		return value;
+	};
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var forEach = Array.prototype.forEach, create = Object.create;
+
+	var process = function (src, obj) {
+		var key;
+		for (key in src) obj[key] = src[key];
+	};
+
+	module.exports = function (options/*, …options*/) {
+		var result = create(null);
+		forEach.call(arguments, function (options) {
+			if (options == null) return;
+			process(Object(options), result);
+		});
+		return result;
+	};
+
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	// Deprecated
+
+	'use strict';
+
+	module.exports = function (obj) { return typeof obj === 'function'; };
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(31)()
+		? String.prototype.contains
+		: __webpack_require__(32);
+
+
+/***/ },
+/* 31 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var str = 'razdwatrzy';
+
+	module.exports = function () {
+		if (typeof str.contains !== 'function') return false;
+		return ((str.contains('dwa') === true) && (str.contains('foo') === false));
+	};
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var indexOf = String.prototype.indexOf;
+
+	module.exports = function (searchString/*, position*/) {
+		return indexOf.call(this, searchString, arguments[1]) > -1;
+	};
+
+
+/***/ },
+/* 33 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function (fn) {
+		if (typeof fn !== 'function') throw new TypeError(fn + " is not a function");
+		return fn;
+	};
+
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"chessboard\" _v-0140373f=\"\">\n\t<table _v-0140373f=\"\">\n\t\t<tbody _v-0140373f=\"\"><tr v-for=\"row in rows\" _v-0140373f=\"\">\n\t\t\t<td v-for=\"cell in row\" :class=\"cell.val == 1 ? 'active' : ''\" _v-0140373f=\"\"></td>\n\t\t</tr>\n\t</tbody></table>\n</div>\n";
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(36)
+	__vue_script__ = __webpack_require__(38)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/components/score.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(39)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-58f9786e/score.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(37);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-58f9786e&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./score.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-58f9786e&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./score.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "h1[_v-58f9786e] {\n  margin: 20px auto 0 auto;\n  font-size: 14px;\n  padding: 6px 0;\n  text-align: center;\n  border-radius: 3px;\n  width: 65px;\n  color: #f60;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.default = {
+		props: ['score']
+	};
+
+/***/ },
+/* 39 */
+/***/ function(module, exports) {
+
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n<h1 _v-58f9786e=\"\">{{score}}</h1>\n";
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__webpack_require__(41)
+	__vue_script__ = __webpack_require__(43)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] src/components/handles.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(44)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), false)
+	  if (!hotAPI.compatible) return
+	  var id = "_v-3ea1ec42/handles.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(42);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-3ea1ec42&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./handles.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-3ea1ec42&scoped=true!./../../node_modules/stylus-loader/index.js!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./handles.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".control[_v-3ea1ec42] {\n  padding: 5px 0 0 0;\n  margin: 0 1em;\n}\n.control .control-content[_v-3ea1ec42] {\n  width: 200px;\n  height: 120px;\n  background: #fff;\n  margin: 0 auto;\n}\n.control table[_v-3ea1ec42] {\n  border-collapse: collapse;\n  width: 100%;\n}\n.control table td[_v-3ea1ec42] {\n  border: 1px solid #fff;\n  vertical-align: middle;\n  width: 33.33%;\n  text-align: center;\n  color: #fff;\n}\n.control table td.roate[_v-3ea1ec42],\n.control table td.down[_v-3ea1ec42] {\n  height: 50px;\n}\n.control table td.touch-style[_v-3ea1ec42] {\n  background: #fff;\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _hammer = __webpack_require__(13);
+
+	var _hammer2 = _interopRequireDefault(_hammer);
+
+	var _dom = __webpack_require__(11);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function touchStyle(tag) {
+		(0, _dom.addClass)(tag, 'touch-style');
+		setTimeout(function () {
+			(0, _dom.removeClass)(this, 'touch-style');
+		}.bind(tag), 100);
+	}
 
 	exports.default = {
-		data: function data() {
-			return {
-				cellWidth: 20,
-				shapeWidth: 3,
-				width: 0,
-				height: 0,
-				startOffset: [0, 0],
-				current: null,
-				preview: null,
-				score: 0,
-				timer: null,
-				speed: initSpeed,
-				status: 'ready',
-				msg: 'TOUCH START'
-			};
-		},
-		components: {
-			chessboard: __webpack_require__(13),
-			score: __webpack_require__(34),
-			handles: __webpack_require__(39)
-		},
+		props: ['status'],
 		methods: {
-			size: function size() {
-				var doc = document.documentElement;
-
-				this.width = Math.min(doc.clientWidth, 400) - 20;
-				this.height = doc.clientHeight - 20;
-
-				this.width -= 100;
-				this.height -= 150;
-
-				this.col = Math.floor(this.width / (this.cellWidth + 2));
-				this.row = Math.floor(this.height / (this.cellWidth + 1));
-
-				this.startOffset = [Math.floor(this.col / 2) - Math.floor(this.shapeWidth / 2), -this.shapeWidth];
+			move: function move(d) {
+				this.$emit('move', d);
 			},
-
-			render: function render() {
-				(0, _dom.css)('.game', {
-					height: document.documentElement.clientHeight + 'px'
-				});
-				(0, _dom.css)('.main', {
-					height: this.height + 'px',
-					width: this.width + 'px'
-				});
-				(0, _dom.css)('.side', {
-					height: this.height + 'px'
-				});
+			roate: function roate() {
+				this.$emit('roate');
 			},
-
-			add: function add() {
-				this.status = 'playing';
-				this.current = this.preview || _shape2.default.random();
-				this.$refs.preview.reset();
-				this.preview = _shape2.default.random();
+			suspend: function suspend() {
+				this.$emit('suspend');
 			},
-
-			restart: function restart() {
-				this.$refs.chessboard.reset();
-				this.score = 0;
-				this.status = 'playing';
-				this.add();
-			},
-
-			toggleMsg: function toggleMsg() {
-				var vm = this;
-
-				switch (this.status) {
-					case 'ready':
-						vm.status = 'playing';
-						vm.add();
-						break;
-					case 'gameover':
-						vm.restart();
-						break;
-					case 'suspend':
-						vm.status = 'playing';
-						break;
-				};
-
-				return this;
-			}
-
-		},
-
-		watch: {
-			status: function status(_status) {
-				this.msg = {
-					suspend: 'SUSPEND',
-					gameover: 'GAME OVER'
-				}[_status] || '';
-			},
-			score: function score(_score) {
-				if (_score < 100) {
-					return;
-				};
-
-				this.speed = initSpeed + Math.floor(_score / 100);
-
-				this.timer.time = 1000 / this.speed;
+			resume: function resume() {
+				this.$emit('resume');
 			}
 		},
-
-		created: function created() {
-			this.size();
-		},
-
 		ready: function ready() {
-			var vm = this,
-			    handles = vm.$refs.handles,
-			    chessboard = vm.$refs.chessboard;
+			var vm = this;
 
-			vm.render();
+			new _hammer2.default(document.querySelector('body')).on('swipeleft swiperight swipedown swipeup', function (e) {
+				if (vm.status !== 'playing') return;
 
-			vm.timer = (0, _interval2.default)(function () {
-				if (vm.status === 'playing') {
-					chessboard.drop();
+				if (e.type === 'swipeup') {
+					vm.roate();
+				} else {
+					vm.move(e.type.replace('swipe', ''));
 				};
-			}, 1000 / vm.speed);
+			}).get('swipe').set({ direction: _hammer2.default.DIRECTION_ALL });
 
-			chessboard.$on('stop', function (shape) {
-				vm.add();
-				vm.timer.time = 1000 / vm.speed;
+			new _hammer2.default(document.querySelector('.btn.left')).on('tap', function () {
+				if (vm.status !== 'playing') return;
+				vm.move('left');
 			});
-
-			chessboard.$on('score', function (times) {
-				vm.score += vm.col * times;
+			new _hammer2.default(document.querySelector('.btn.right')).on('tap', function () {
+				if (vm.status !== 'playing') return;
+				vm.move('right');
 			});
-
-			chessboard.$on('gameover', function (times) {
-				vm.status = 'gameover';
+			new _hammer2.default(document.querySelector('.btn.down')).on('tap', function () {
+				if (vm.status !== 'playing') return;
+				vm.move('down');
 			});
-
-			handles.$on('move', function (d) {
-				chessboard.move(d);
-
-				if (d == 'down') {
-					vm.timer.time -= vm.timer.time * 0.3;
-				};
-			});
-			handles.$on('roate', function () {
-				chessboard.roate();
-			});
-			handles.$on('suspend', function () {
-				if (vm.status === 'playing') {
-					vm.status = 'suspend';
-				};
-			});
-			handles.$on('resume', function () {
-				vm.status = 'playing';
+			new _hammer2.default(document.querySelector('.btn.roate')).on('tap', function () {
+				if (vm.status !== 'playing') return;
+				vm.roate();
 			});
 
-			new _hammer2.default((0, _dom.query)('.play')).on('tap', function (e) {
-				if (vm.status === 'suspend') {
-					vm.status = 'playing';
-				} else if (vm.status === 'playing') {
-					vm.status = 'suspend';
-				};
+			(0, _dom.on)('td.btn', 'touchstart', function (e) {
+				touchStyle(e.target);
 			});
 
-			new _hammer2.default((0, _dom.query)('.msg')).on('tap', function (e) {
-				vm.toggleMsg();
+			document.addEventListener('keydown', function (e) {
+				switch (e.key) {
+					case 'ArrowLeft':
+						return vm.status === 'playing' && vm.move('left');
+					case 'ArrowRight':
+						return vm.status === 'playing' && vm.move('right');
+					case 'ArrowDown':
+						return vm.status === 'playing' && vm.move('down');
+					case 'ArrowUp':
+						return vm.status === 'playing' && vm.roate();
+					case ' ':
+						if (vm.status === 'suspend') {
+							vm.resume();
+						} else if (vm.status === 'playing') {
+							vm.suspend();
+						};
+						return;
+				}
+			});
+
+			document.addEventListener('touchstart', function (e) {
+				e.returnValue = false;
 			});
 		}
 	};
 
 /***/ },
-/* 50 */
+/* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"game\">\n\n\t<chessboard class=\"main\" v-ref:chessboard\n\t\t:col=\"col\" :row=\"row\" :current=\"current\" :start=\"startOffset\">\n\t</chessboard>\n\n\t<div class=\"side\">\n\n\t\t<chessboard v-ref:preview \n\t\t\t:col=\"3\" :row=\"3\" :current=\"preview\">\n\t\t</chessboard>\n\n\t\t<score :score=\"score\"></score>\n\n\t\t<div class=\"play\" v-show=\"status === 'playing'\">\n\t\t\t<div class=\"suspend\">暂停</div>\n\t\t</div>\n\n\t</div>\n\n\t<div class=\"handles\">\n\t\t<handles v-ref:handles \n\t\t\t:status=\"status\">\n\t\t</handles>\n\t</div>\n\n\t<div class=\"msg\" v-show=\"msg\">\n\t\t<span>{{msg}}</span>\n\t</div>\n</div>\n";
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<div class=\"control\" _v-3ea1ec42=\"\">\n\t<table _v-3ea1ec42=\"\">\n\t\t<tbody _v-3ea1ec42=\"\"><tr _v-3ea1ec42=\"\">\n\t\t\t<td class=\"btn left\" rowspan=\"2\" _v-3ea1ec42=\"\">←</td>\n\t\t\t<td class=\"btn roate\" _v-3ea1ec42=\"\"></td>\n\t\t\t<td class=\"btn right\" rowspan=\"2\" _v-3ea1ec42=\"\">→</td>\n\t\t</tr>\n\t\t<tr _v-3ea1ec42=\"\">\n\t\t\t<td class=\"btn down\" _v-3ea1ec42=\"\">↓</td>\n\t\t</tr>\n\t</tbody></table>\n</div>\n";
+
+/***/ },
+/* 45 */
+/***/ function(module, exports) {
+
+	module.exports = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<!-- 容器 -->\n<div class=\"game\">\n\t\n\t<!-- 主界面 -->\n\t<chessboard class=\"main\" v-ref:chessboard\n\t\t:col=\"col\" :row=\"row\" :current=\"current\" :start=\"startOffset\">\n\t</chessboard>\n\t\n\t<!-- 侧面 -->\n\t<div class=\"side\">\n\t\t\n\t\t<!-- 预览小窗口 -->\n\t\t<chessboard v-ref:preview \n\t\t\t:col=\"3\" :row=\"3\" :current=\"preview\">\n\t\t</chessboard>\n\t\t\n\t\t<!-- 成绩 -->\n\t\t<score :score=\"score\"></score>\n\t\t\n\t\t<!-- 暂停 -->\n\t\t<div class=\"play\" v-show=\"status === 'playing'\">\n\t\t\t<div class=\"suspend\">暂停</div>\n\t\t</div>\n\n\t</div>\n\t\n\t<!-- 控制器 -->\n\t<div class=\"handles\">\n\t\t<handles v-ref:handles \n\t\t\t:status=\"status\">\n\t\t</handles>\n\t</div>\n\t\n\t<!-- 全屏覆盖的消息 -->\n\t<div class=\"msg\" v-show=\"msg\">\n\t\t<span>{{msg}}</span>\n\t</div>\n</div>\n";
 
 /***/ }
 /******/ ])
